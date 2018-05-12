@@ -1,0 +1,23 @@
+.GridSection {
+    display: grid;
+    grid-template-areas: 'title cards plus';
+    grid-gap: 10px;
+    
+    padding: 30px;
+    height: 25%;
+}
+
+.sectionTitle {
+    grid-area: title;
+    text-orientation: sideways-right;
+    writing-mode: vertical-lr;
+}
+
+.cardsSection {
+    grid-area: cards;
+}
+
+.plusButton {
+    grid-area: plus;
+    height: 50px;
+}
