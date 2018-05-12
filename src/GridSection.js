@@ -1,15 +1,27 @@
 import React, { Component } from 'react';
 import './GridSection.css';
-import SECTIONCOLORS from './Constants.js'
+import CONSTANTS from './Constants.js'
+import Card from './Card.js'
+
 
 class GridSection extends Component {
-  render() {
-    return (
-      <div className="GridSection" style={{backgroundColor:SECTIONCOLORS[this.props.sectionTitle]}}>
-        <div className="sectionTitle">{this.props.sectionTitle}</div>
-      </div>
-    );
-  }
+    render() {
+        return (
+        <div className="GridSection" style={{backgroundColor:CONSTANTS.sectionColors[this.props.sectionTitle]}}>
+            <div className="sectionTitle">{this.props.sectionTitle}</div>
+            <div className="cardsSection">
+                {this.props.cards.map((cardId, i) =>
+                    <Card cardId={cardId}/>
+                )}
+            </div>
+            <img 
+                className="plusButton" 
+                src={require('./icons/plusButton.svg')}
+                onClick={this.props.addToList}
+            />
+        </div>
+        );
+    }
 }
 
 export default GridSection;
