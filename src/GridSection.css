@@ -1,0 +1,8 @@
+.GridSection {
+    padding: 10px;
+}
+
+.sectionTitle {
+    text-orientation: sideways-right;
+    writing-mode: vertical-lr;
+}
