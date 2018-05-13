@@ -5,8 +5,10 @@
   background-color: #222;
   padding: 20px;
   color: white;
+  height: 80px;
 }
 
 .App-title {
   font-size: 2em;
+  padding-left: 20px;
 }
