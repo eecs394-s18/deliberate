@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Grid.css';
-import GridSection from './GridSection.js'
-import CONSTANTS from './Constants.js'
+import GridSection from './GridSection.js';
+import CONSTANTS from './Constants.js';
 
 class Grid extends Component {
     sections = ["Values", "Goals", "Problems", "Solutions"];
@@ -33,6 +33,7 @@ class Grid extends Component {
         <div className="Grid">
             {this.sections.map((sectionTitle, i) =>
                 <GridSection 
+                    key={sectionTitle}
                     sectionTitle={sectionTitle} 
                     cards={this.state.cards[sectionTitle]} 
                     addToList= {() => this.addToList(sectionTitle)}

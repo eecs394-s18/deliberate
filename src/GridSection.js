@@ -11,13 +11,14 @@ class GridSection extends Component {
             <div className="sectionTitle">{this.props.sectionTitle}</div>
             <div className="cardsSection">
                 {this.props.cards.map((cardId, i) =>
-                    <Card cardId={cardId}/>
+                    <Card cardId={cardId} key={cardId}/>
                 )}
             </div>
             <img 
                 className="plusButton" 
                 src={require('./icons/plusButton.svg')}
                 onClick={this.props.addToList}
+                alt="Plus button"
             />
         </div>
         );
