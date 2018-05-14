@@ -17,7 +17,6 @@ class Grid extends Component {
         };
         this.addToList = this.addToList.bind(this)
     }
-
     addToList(sectionId) {
         var tCards = this.state.cards;
         var newCardIndex = tCards[sectionId].length+1;

@@ -1,10 +1,18 @@
 .Card {
     width: 150px;
     height: 80px;
+    margin: 5px;
     background-color: whitesmoke;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.cardBorder{
+    width: 160px;
+    height: 90px;
+    margin: 15px;
+    background-color: black;
     display: inline-block;
-    margin-left: 20px;
-    padding-top: 20px;
     text-align: center;
     border-radius: 20px;
 }
