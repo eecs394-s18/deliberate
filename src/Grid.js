@@ -28,6 +28,16 @@ class Grid extends Component {
         });
     }
 
+    deletefromList(sectionId) {
+        var tCards = this.state.cards;
+        var CardIndex = tCards[sectionId].length;
+        var CardId = CONSTANTS.sectionPrefix[sectionId] + CardIndex;
+        tCards[sectionId].pop(CardId);
+        this.setState({
+            cards: tCards,
+        });
+    }
+
     render() {
         return (
         <div className="Grid">
