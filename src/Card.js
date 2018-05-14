@@ -16,15 +16,18 @@ class Card extends Component {
     console.log(this.state.x +" "+this.state.y + " "+this.state.xSet +" "+this.state.ySet + 
                 " " + this.state.cardHeight + " " + this.state.cardWidth);
     // the mouse on the margin
-    if(this.state.xSet< this.state.margin || this.state.xSet > this.state.cardHeight - this.state.margin || 
+    if(this.state.xSet< this.state.margin || this.state.xSet > this.state.cardWidth - this.state.margin || 
        this.state.ySet < this.state.margin || this.state.ySet > this.state.cardHeight- this.state.margin){
       this.clickOnMargin();
     }else{
-      console.log("Not on the card");
+      this.clickOncard();
     }
   }
   clickOnMargin(){
     console.log("On the margin");
+  }
+  clickOncard(){
+    console.log("On the card");
   }
   _onMouseMove(e){
     var bounds = e.target.getBoundingClientRect();
