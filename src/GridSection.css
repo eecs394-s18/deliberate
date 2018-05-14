@@ -3,8 +3,10 @@
     grid-template-areas: 
         'title cards plus';
     grid-template-columns: 40px auto 40px; 
-    padding: 30px;
+    padding-right: 2%;
+    padding-left: 2%;
     grid-gap: 5px;
+    min-height: 25%;
 }
 
 .sectionTitle {
@@ -13,10 +15,12 @@
     writing-mode: vertical-lr;
     justify-self: center;
     align-self: center;
+    font-size: 1.5em;
 }
 
 .cardsSection {
     grid-area: cards;
+    align-self: center;
 }
 
 .plusButton {
