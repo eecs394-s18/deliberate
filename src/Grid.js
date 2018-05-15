@@ -15,13 +15,17 @@ class Grid extends Component {
                 "Problems": ["P1", "P2", "P3"],
                 "Solutions": ["S1", "S2"]
             },
-
+            cardHeight:0,
+            cardWidth:0,
+            clickCount: 0,
             lineCoordinates: [],
             lines: [],
-            clickCount: 0,
+            margin:10,
             tempClicks: [],
-
-            x:0,y:0,xSet:0,ySet:0,cardWidth:0,cardHeight:0,margin:10,
+            x:0,
+            xSet:0,
+            y:0,
+            ySet:0,
         };
 
         this.addToList = this.addToList.bind(this);
@@ -61,18 +65,16 @@ class Grid extends Component {
         oldCoordinates.push(coordinates);
         this.setState({lineCoordinates: oldCoordinates});
 
-        let numCoords = this.state.lineCoordinates.length;
         var tempClicks = this.state.tempClicks 
         var newCount = currCount + 1;
 
         tempClicks.push(coordinates);
             
-        if (newCount % 2 === 0 && newCount != 0) {
+        if (newCount % 2 === 0 && newCount !== 0) {
             var newLines = this.state.lines;
             newLines.push(tempClicks);
             this.setState({lines: newLines});
-            console.log("new line added!");
-            console.log(this.state.lines);
+            console.log("new line added to lines object!");
             tempClicks = [];
         }
 

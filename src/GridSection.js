@@ -13,7 +13,8 @@ class GridSection extends Component {
             <div className="sectionTitle">{this.props.sectionTitle}</div>
             <div className="cardsSection">
                 {this.props.cards.map((cardId, i) =>
-                    <Card cardId={cardId} mouseFunction={this.props.onMouseMoveFunction} cardOnClick={this.props.cardClickFunction} key={cardId}/>
+                    <Card cardId={cardId} mouseFunction={this.props.onMouseMoveFunction} 
+                    cardOnClick={this.props.cardClickFunction} key={cardId}/>
                 )}
             </div>
             <img 
