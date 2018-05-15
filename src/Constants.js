@@ -12,6 +12,7 @@ var CONSTANTS = {
     "Problems": "P",
     "Solutions": "S"
     }
+
 }
 
 export default CONSTANTS;

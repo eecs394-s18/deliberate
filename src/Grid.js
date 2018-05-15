@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Grid.css';
 import GridSection from './GridSection.js';
 import CONSTANTS from './Constants.js';
+import {Line} from 'react-lineto';
 
 class Grid extends Component {
     sections = ["Values", "Goals", "Problems", "Solutions"];
@@ -38,7 +39,9 @@ class Grid extends Component {
                     addToList= {() => this.addToList(sectionTitle)}
                 />
             )}
+        <Line x0={0} y0={0} x1={100} y1={100} borderColor={"#00f"} />
         </div>
+    
         );
     }
 }
