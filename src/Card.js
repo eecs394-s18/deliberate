@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import './Card.css';
-import GridSection from './GridSection.js';
-import CONSTANTS from './Constants.js';
-import Grid from './Grid.js'
 
 class Card extends Component {
   render() {

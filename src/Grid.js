@@ -28,7 +28,7 @@ class Grid extends Component {
                 max = thiscardindex;
             }
         });
-        var newCardIndex = parseInt(max)+1;
+        var newCardIndex = parseInt(max, 10)+1;
         var newCardId = CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
         tCards[sectionId].push(newCardId);
         this.setState({
