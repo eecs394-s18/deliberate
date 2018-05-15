@@ -16,8 +16,14 @@ class Grid extends Component {
                 "Solutions": ["S1", "S2"]
             },
 
-            x:0,y:0,xSet:0,ySet:0,cardWidth:0,cardHeight:0,margin:4,
+            lineCoordinates: [],
+            lines: [],
+            clickCount: 0,
+            tempClicks: [],
+
+            x:0,y:0,xSet:0,ySet:0,cardWidth:0,cardHeight:0,margin:10,
         };
+
         this.addToList = this.addToList.bind(this);
         this.clickOnCard = this.clickOnCard.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
@@ -47,7 +53,31 @@ class Grid extends Component {
     }
 
     clickOnMargin(){
+        var currCount = this.state.clickCount;
         console.log("On the margin");
+
+        let coordinates = [this.state.x, this.state.y];
+        let oldCoordinates = this.state.lineCoordinates;
+        oldCoordinates.push(coordinates);
+        this.setState({lineCoordinates: oldCoordinates});
+
+        let numCoords = this.state.lineCoordinates.length;
+        var tempClicks = this.state.tempClicks 
+        var newCount = currCount + 1;
+
+        tempClicks.push(coordinates);
+            
+        if (newCount % 2 === 0 && newCount != 0) {
+            var newLines = this.state.lines;
+            newLines.push(tempClicks);
+            this.setState({lines: newLines});
+            console.log("new line added!");
+            console.log(this.state.lines);
+            tempClicks = [];
+        }
+
+        this.setState({tempClicks: tempClicks});
+        this.setState({clickCount: newCount});
     }
     
     clickOncard(){
@@ -77,7 +107,9 @@ class Grid extends Component {
                     addToList= {() => this.addToList(sectionTitle)}
                 />
             )}
-        <Line x0={0} y0={0} x1={100} y1={100} borderColor={"#00f"} />
+
+            {this.state.lines.map((line, index) =>
+                <Line key={line} x0={line[0][0]} y0={line[0][1]} x1={line[1][0]} y1={line[1][1]} borderColor={"#00f"} />)}
         </div>
     
         );
