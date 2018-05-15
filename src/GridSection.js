@@ -5,13 +5,15 @@ import Card from './Card.js'
 
 
 class GridSection extends Component {
+    
     render() {
+
         return (
         <div className="GridSection" style={{backgroundColor:CONSTANTS.sectionColors[this.props.sectionTitle]}}>
             <div className="sectionTitle">{this.props.sectionTitle}</div>
             <div className="cardsSection">
                 {this.props.cards.map((cardId, i) =>
-                    <Card cardId={cardId} key={cardId}/>
+                    <Card cardId={cardId} mouseFunction={this.props.onMouseMoveFunction} cardOnClick={this.props.cardClickFunction} key={cardId}/>
                 )}
             </div>
             <img 
