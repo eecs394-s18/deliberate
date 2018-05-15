@@ -21,7 +21,14 @@ class Grid extends Component {
 
     addToList(sectionId) {
         var tCards = this.state.cards;
-        var newCardIndex = tCards[sectionId].length+1;
+        var max = 0;
+        tCards[sectionId].forEach(element => {
+            var thiscardindex = element.substring(1,);
+            if (max < thiscardindex){
+                max = thiscardindex;
+            }
+        });
+        var newCardIndex = parseInt(max)+1;
         var newCardId = CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
         tCards[sectionId].push(newCardId);
         this.setState({
