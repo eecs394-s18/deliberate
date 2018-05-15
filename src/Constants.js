@@ -1,4 +1,8 @@
 var CONSTANTS = {
+    sectionNames: [
+        "Values", "Goals", "Problems", "Solutions"
+    ],
+
     sectionColors: {
         "Values": "#DEDEDE",
         "Goals": "#9DDEDE", 
@@ -7,10 +11,10 @@ var CONSTANTS = {
     },
 
     sectionPrefix: {
-    "Values": "V",
-    "Goals": "G", 
-    "Problems": "P",
-    "Solutions": "S"
+        "Values": "V",
+        "Goals": "G",
+        "Problems": "P",
+        "Solutions": "S"
     }
 }
 
