@@ -36,7 +36,7 @@ class Grid extends Component {
         var offsetY = e.clientY - bounds.top;
         var width = bounds.right - bounds.left;
         var height =  bounds.bottom - bounds.top;
-        this.setState({ x: e.screenX, y: e.screenY, xSet:offsetX,ySet:offsetY,cardWidth:width,cardHeight:height});
+        this.setState({ x: e.clientX, y: e.clientY, xSet:offsetX,ySet:offsetY,cardWidth:width,cardHeight:height});
     }
 
 
