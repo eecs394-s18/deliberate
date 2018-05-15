@@ -16,6 +16,7 @@ class Grid extends Component {
             }
         };
         this.addToList = this.addToList.bind(this)
+        this.deletefromList = this.deletefromList.bind(this)
     }
 
     addToList(sectionId) {
@@ -28,11 +29,9 @@ class Grid extends Component {
         });
     }
 
-    deletefromList(sectionId) {
+    deletefromList(sectionId, cardId) {
         var tCards = this.state.cards;
-        var CardIndex = tCards[sectionId].length;
-        var CardId = CONSTANTS.sectionPrefix[sectionId] + CardIndex;
-        tCards[sectionId].pop(CardId);
+        tCards[sectionId].splice( tCards[sectionId].indexOf(cardId), 1 );
         this.setState({
             cards: tCards,
         });
@@ -47,6 +46,7 @@ class Grid extends Component {
                     sectionTitle={sectionTitle} 
                     cards={this.state.cards[sectionTitle]} 
                     addToList= {() => this.addToList(sectionTitle)}
+                    deletefromList= {this.deletefromList}
                 />
             )}
         </div>

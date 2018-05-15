@@ -11,7 +11,12 @@ class GridSection extends Component {
             <div className="sectionTitle">{this.props.sectionTitle}</div>
             <div className="cardsSection">
                 {this.props.cards.map((cardId, i) =>
-                    <Card cardId={cardId} key={cardId}/>
+                    <Card
+                        cardId={cardId}
+                        key={cardId}
+                        deletefromList={() =>
+                            this.props.deletefromList(this.props.sectionTitle, cardId)}
+                    />
                 )}
             </div>
             <img 
