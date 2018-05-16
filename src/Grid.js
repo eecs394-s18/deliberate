@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Grid.css';
 import GridSection from './GridSection.js';
 import CONSTANTS from './Constants.js';
+import firebase from './firebase/FirebaseConfig';
 
 class Grid extends Component {
     sections = ["Values", "Goals", "Problems", "Solutions"];
@@ -9,14 +10,32 @@ class Grid extends Component {
         super(props);
         this.state = {
             cards: {
-                "Values": ["V1", "V2"],
-                "Goals": ["G1"],
-                "Problems": ["P1", "P2", "P3"],
-                "Solutions": ["S1", "S2"]
+                "Values": [],
+                "Goals": [],
+                "Problems": [],
+                "Solutions": []
             }
         };
         this.addToList = this.addToList.bind(this)
         this.deletefromList = this.deletefromList.bind(this)
+    }
+
+    listenToCardsForMeetingFromDB(dbRef) {
+        CONSTANTS.sectionNames.forEach(sectionName => {
+            let sectionRefString = 'meetings/1/'+sectionName;
+            let thisSectionRef = dbRef.ref(sectionRefString);
+
+            thisSectionRef.on('value', (snapshot) => {
+                let tCards = this.state.cards;
+                tCards[sectionName] = Object.keys(snapshot.val());
+                this.setState({ cards : tCards})
+            });
+        });
+    }
+
+    componentWillMount() {
+        const dbRef = firebase.database();
+        this.listenToCardsForMeetingFromDB(dbRef);
     }
 
     addToList(sectionId) {
