@@ -3,9 +3,11 @@ import './Grid.css';
 import GridSection from './GridSection.js';
 import CONSTANTS from './Constants.js';
 import firebase from './firebase/FirebaseConfig';
+import LineTo from 'react-lineto';
 
 class Grid extends Component {
     sections = ["Values", "Goals", "Problems", "Solutions"];
+    linkTuple = [];
     constructor(props) {
         super(props);
         this.state = {
@@ -14,10 +16,12 @@ class Grid extends Component {
                 "Goals": [],
                 "Problems": [],
                 "Solutions": []
-            }
+            },
+            links: [],
         };
-        this.addToList = this.addToList.bind(this)
-        this.deletefromList = this.deletefromList.bind(this)
+        this.addToList = this.addToList.bind(this);
+        this.deletefromList = this.deletefromList.bind(this);
+        this.drawLink = this.drawLink.bind(this);
     }
 
     listenToCardsForMeetingFromDB(dbRef) {
@@ -55,6 +59,19 @@ class Grid extends Component {
         });
     }
 
+
+    drawLink(cardId) {
+      this.linkTuple.push(cardId);
+      if(this.linkTuple.length === 2){
+          var tLinks = this.state.links;
+          tLinks.push(this.linkTuple);
+          this.setState({
+              links: tLinks,
+          });
+          this.linkTuple =[];
+      }
+    }
+
     deletefromList(sectionId, cardId) {
         var tCards = this.state.cards;
         tCards[sectionId].splice( tCards[sectionId].indexOf(cardId), 1 );
@@ -66,15 +83,20 @@ class Grid extends Component {
     render() {
         return (
         <div className="Grid">
+
             {this.sections.map((sectionTitle, i) =>
-                <GridSection 
+                <GridSection
                     key={sectionTitle}
-                    sectionTitle={sectionTitle} 
-                    cards={this.state.cards[sectionTitle]} 
+                    sectionTitle={sectionTitle}
+                    cards={this.state.cards[sectionTitle]}
                     addToList= {() => this.addToList(sectionTitle)}
                     deletefromList= {this.deletefromList}
+                    drawLink = {this.drawLink}
                 />
-            )}
+            )};
+            {this.state.links.map((t) =>
+                <LineTo from={t[0]} to={t[1]} />
+            )};
         </div>
         );
     }

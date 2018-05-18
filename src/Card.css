@@ -1,4 +1,5 @@
 .Card {
+    z-index: 1000;
     width: 150px;
     height: 80px;
     background-color: whitesmoke;
@@ -8,7 +9,37 @@
     text-align: center;
     border-radius: 20px;
     vertical-align: center;
+    position: relative;
 }
-.deleteButton{
-	float: right;
+
+.deleteButton {
+    float: right;
+}
+
+.linkOriginButton {
+    height: 15px;
+    width: 15px;
+    background-color: lightgreen;
+    border-radius: 100%;
+    border: solid;
+    position: absolute;
+    bottom: -7.5px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+}
+
+.linkDestButton {
+    height: 15px;
+    width: 15px;
+    background-color: lightblue;
+    border-radius: 100%;
+    border: solid;
+    position: absolute;
+    top: -7.5px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
 }
