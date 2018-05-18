@@ -28,3 +28,17 @@
     left: 0;
     right: 0;
 }
+
+.linkDestButton{
+    height: 15px;
+    width: 15px;
+    background-color: lightblue;
+    border-radius: 100%;
+    border: solid;
+    position: absolute;
+    top: -7.5px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+}
