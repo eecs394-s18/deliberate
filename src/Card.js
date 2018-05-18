@@ -6,22 +6,22 @@ class Card extends Component {
     return (
       <div className="Card">
             <img
-              className="linkDestButton" 
+              className="linkDestButton"
               src={require('./icons/plusNoBackground.svg')}
-              onClick={this.props.drawLinkDest}
+              onClick={this.props.drawLink}
               alt="Link Dest Button"
             />
-            <img 
-              className="deleteButton" 
+            <img
+              className="deleteButton"
               src={require('./icons/iconmonstr-x-mark.svg')}
               onClick={this.props.deletefromList}
               alt="Delete Button"
             />
             {this.props.cardId}
             <img
-              className="linkOriginButton" 
+              className="linkOriginButton"
               src={require('./icons/plusNoBackground.svg')}
-              onClick={this.props.drawLinkOrigin}
+              onClick={this.props.drawLink}
               alt="Link Origin Button"
             />
       </div>

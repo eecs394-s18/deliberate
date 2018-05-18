@@ -16,11 +16,13 @@ class GridSection extends Component {
                         key={cardId}
                         deletefromList={() =>
                             this.props.deletefromList(this.props.sectionTitle, cardId)}
+                        drawLink={() =>
+                            this.props.drawLink(cardId)}
                     />
                 )}
             </div>
-            <img 
-                className="plusButton" 
+            <img
+                className="plusButton"
                 src={require('./icons/plusButton.svg')}
                 onClick={this.props.addToList}
                 alt="Plus button"

@@ -55,6 +55,14 @@ class Grid extends Component {
         });
     }
 
+
+
+    drawLink(cardId) {
+      alert(cardId);
+
+
+
+    }
     deletefromList(sectionId, cardId) {
         var tCards = this.state.cards;
         tCards[sectionId].splice( tCards[sectionId].indexOf(cardId), 1 );
@@ -67,12 +75,13 @@ class Grid extends Component {
         return (
         <div className="Grid">
             {this.sections.map((sectionTitle, i) =>
-                <GridSection 
+                <GridSection
                     key={sectionTitle}
-                    sectionTitle={sectionTitle} 
-                    cards={this.state.cards[sectionTitle]} 
+                    sectionTitle={sectionTitle}
+                    cards={this.state.cards[sectionTitle]}
                     addToList= {() => this.addToList(sectionTitle)}
                     deletefromList= {this.deletefromList}
+                    drawLink = {this.drawLink}
                 />
             )}
         </div>
