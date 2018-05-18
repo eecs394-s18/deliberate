@@ -6,6 +6,7 @@ import firebase from './firebase/FirebaseConfig';
 
 class Grid extends Component {
     sections = ["Values", "Goals", "Problems", "Solutions"];
+    linkTuple = [];
     constructor(props) {
         super(props);
         this.state = {
@@ -14,10 +15,12 @@ class Grid extends Component {
                 "Goals": [],
                 "Problems": [],
                 "Solutions": []
-            }
+            },
+            links: [],
         };
-        this.addToList = this.addToList.bind(this)
-        this.deletefromList = this.deletefromList.bind(this)
+        this.addToList = this.addToList.bind(this);
+        this.deletefromList = this.deletefromList.bind(this);
+        this.drawLink = this.drawLink.bind(this);
     }
 
     listenToCardsForMeetingFromDB(dbRef) {
@@ -56,13 +59,18 @@ class Grid extends Component {
     }
 
 
-
     drawLink(cardId) {
-      alert(cardId);
-
-
-
+      this.linkTuple.push(cardId);
+      if(this.linkTuple.length === 2){
+          var tLinks = this.state.links;
+          tLinks.push([this.linkTuple]);
+          this.setState({
+              links: tLinks,
+          });
+          this.linkTuple =[];
+      }
     }
+
     deletefromList(sectionId, cardId) {
         var tCards = this.state.cards;
         tCards[sectionId].splice( tCards[sectionId].indexOf(cardId), 1 );
