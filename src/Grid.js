@@ -17,12 +17,19 @@ class Grid extends Component {
                 "Problems": [],
                 "Solutions": []
             },
+<<<<<<< HEAD
+            meetingId: "1",
+            textarea : `Multiline example
+  text value`
+=======
             links: [],
+>>>>>>> e4a4a5e93af47ccbf02ff6fd4be4f6996d127eb7
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
         this.drawLink = this.drawLink.bind(this);
     }
+
 
     listenToCardsForMeetingFromDB(dbRef) {
         CONSTANTS.sectionNames.forEach(sectionName => {
@@ -35,6 +42,16 @@ class Grid extends Component {
                 this.setState({ cards : tCards})
             });
         });
+    }
+
+    UpdateCardsForMeetingFromDB(sectionId, newCardId){
+        var path = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
+        firebase.database().ref().child(path).set("true");
+        // var Update = {};
+        // console.log(sectionId, newCardId);
+        // Update["/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId] = {"true"};
+        // console.log(Update);
+        return
     }
 
     componentWillMount() {
@@ -53,6 +70,7 @@ class Grid extends Component {
         });
         var newCardIndex = parseInt(max, 10)+1;
         var newCardId = CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
+        this.UpdateCardsForMeetingFromDB(sectionId, newCardId);
         tCards[sectionId].push(newCardId);
         this.setState({
             cards: tCards,
