@@ -41,11 +41,14 @@ class Grid extends Component {
         });
     }
 
-    UpdateCardsForMeetingFromDB(sectionId, newCardId){
-        var path = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
-        firebase.database().ref().child(path).set("true");
+    UpdateCardsForDB(sectionId, newCardId){
+        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
+        var pathToCard = "/cards/" + newCardId;
+        firebase.database().ref().child(pathToMeeting).set("true");
+        firebase.database().ref().child(pathToCard).set("true");
         return
     }
+
 
     componentWillMount() {
         const dbRef = firebase.database();
@@ -63,7 +66,7 @@ class Grid extends Component {
         });
         var newCardIndex = parseInt(max, 10)+1;
         var newCardId = CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
-        this.UpdateCardsForMeetingFromDB(sectionId, newCardId);
+        this.UpdateCardsForDB(sectionId, newCardId);
     }
 
 
@@ -80,11 +83,11 @@ class Grid extends Component {
     }
 
     deletefromList(sectionId, cardId) {
-        var tCards = this.state.cards;
-        tCards[sectionId].splice( tCards[sectionId].indexOf(cardId), 1 );
-        this.setState({
-            cards: tCards,
-        });
+        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
+        var pathToCard = "/cards/" + cardId;
+        firebase.database().ref().child(pathToMeeting).remove();
+        firebase.database().ref().child(pathToCard).remove();
+        return
     }
 
     render() {
