@@ -5,6 +5,7 @@ class Card extends Component {
   render() {
     return (
       <div className="Card">
+        <div className = {this.props.cardId}>
             <img
               className="linkDestButton"
               src={require('./icons/plusNoBackground.svg')}
@@ -24,6 +25,7 @@ class Card extends Component {
               onClick={this.props.drawLink}
               alt="Link Origin Button"
             />
+         </div>
       </div>
 
     );

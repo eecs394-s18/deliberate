@@ -3,6 +3,7 @@ import './Grid.css';
 import GridSection from './GridSection.js';
 import CONSTANTS from './Constants.js';
 import firebase from './firebase/FirebaseConfig';
+import LineTo from 'react-lineto';
 
 class Grid extends Component {
     sections = ["Values", "Goals", "Problems", "Solutions"];
@@ -63,7 +64,7 @@ class Grid extends Component {
       this.linkTuple.push(cardId);
       if(this.linkTuple.length === 2){
           var tLinks = this.state.links;
-          tLinks.push([this.linkTuple]);
+          tLinks.push(this.linkTuple);
           this.setState({
               links: tLinks,
           });
@@ -82,6 +83,7 @@ class Grid extends Component {
     render() {
         return (
         <div className="Grid">
+
             {this.sections.map((sectionTitle, i) =>
                 <GridSection
                     key={sectionTitle}
@@ -91,7 +93,10 @@ class Grid extends Component {
                     deletefromList= {this.deletefromList}
                     drawLink = {this.drawLink}
                 />
-            )}
+            )};
+            {this.state.links.map((t) =>
+                <LineTo from={t[0]} to={t[1]} />
+            )};
         </div>
         );
     }

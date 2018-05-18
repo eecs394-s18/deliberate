@@ -1,4 +1,5 @@
 .Card {
+    z-index: 1000;
     width: 150px;
     height: 80px;
     background-color: whitesmoke;
@@ -12,7 +13,7 @@
 }
 
 .deleteButton {
-	float: right;
+    float: right;
 }
 
 .linkOriginButton {
@@ -29,7 +30,7 @@
     right: 0;
 }
 
-.linkDestButton{
+.linkDestButton {
     height: 15px;
     width: 15px;
     background-color: lightblue;
