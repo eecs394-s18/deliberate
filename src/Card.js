@@ -30,17 +30,10 @@ class Card extends Component {
             <img
               className="linkDestButton"
               src={require('./icons/plusNoBackground.svg')}
-<<<<<<< HEAD
-              onClick={this.props.drawLinkDest}
-              alt="Link Dest Button"/>
-            <img 
-              className="deleteButton" 
-=======
               onClick={this.props.drawLink}
               alt="Link Dest Button"/>
             <img
               className="deleteButton"
->>>>>>> e4a4a5e93af47ccbf02ff6fd4be4f6996d127eb7
               src={require('./icons/iconmonstr-x-mark.svg')}
               onClick={this.props.deletefromList}
               alt="Delete Button"/>
@@ -57,14 +50,9 @@ class Card extends Component {
             <img
               className="linkOriginButton"
               src={require('./icons/plusNoBackground.svg')}
-<<<<<<< HEAD
-              onClick={this.props.drawLinkOrigin}
-              alt="Link Origin Button"/>
-=======
               onClick={this.props.drawLink}
               alt="Link Origin Button"/>
          </div>
->>>>>>> e4a4a5e93af47ccbf02ff6fd4be4f6996d127eb7
       </div>
 
     );
