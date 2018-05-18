@@ -8,7 +8,23 @@
     text-align: center;
     border-radius: 20px;
     vertical-align: center;
+    position: relative;
 }
-.deleteButton{
+
+.deleteButton {
 	float: right;
+}
+
+.linkOriginButton {
+    height: 15px;
+    width: 15px;
+    background-color: lightgreen;
+    border-radius: 100%;
+    border: solid;
+    position: absolute;
+    bottom: -7.5px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
 }
