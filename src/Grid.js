@@ -65,7 +65,7 @@ class Grid extends Component {
             }
         });
         var newCardIndex = parseInt(max, 10)+1;
-        var newCardId = CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
+        var newCardId = "M" + meetingId + CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
         this.UpdateCardsForDB(sectionId, newCardId);
     }
 
