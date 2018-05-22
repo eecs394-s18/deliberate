@@ -39,6 +39,19 @@ class Grid extends Component {
                     tCards[sectionName] = Object.keys(snapshot.val());
                     this.setState({ cards : tCards})
             });
+
+        });
+        let linkId = 'links/';
+        let linksRef = dbRef.ref(linkId);
+
+        linksRef.on('value', (snapshot) => {
+            let tlinks = this.state.links;
+
+            Object.keys(snapshot.val()).forEach(l => {
+                tlinks.push(l);
+            });
+            this.setState({links:tlinks});
+            console.log(this.state.links);
         });
     }
 
@@ -77,6 +90,10 @@ class Grid extends Component {
       if(this.linkTuple.length === 2){
           var tLinks = this.state.links;
           tLinks.push(this.linkTuple);
+
+          var pathToLink = "/links/";
+          firebase.database().ref().child(pathToLink).set("");
+
           this.setState({
               links: tLinks,
           });
