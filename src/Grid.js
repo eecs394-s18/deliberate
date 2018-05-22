@@ -48,32 +48,32 @@ class Grid extends Component {
 
             });
             let linkPath = 'links/';
-        let linksRef = dbRef.ref(linkPath);
+            let linksRef = dbRef.ref(linkPath);
 
-        linksRef.on('value', (snapshot) => {
-            var tlinks = [];
-            var origin, dest;
-            var linkTuple;
-            if(snapshot.val()){
-                Object.keys(snapshot.val()).forEach(l => {
-                    if (l !== "linkschild"){
-                        console.log(l);
-                        var linkId = 'links/' + l;
-                        var linksIdRef = dbRef.ref(linkId);
+            linksRef.on('value', (snapshot) => {
+                var tlinks = [];
+                var origin, dest;
+                var linkTuple;
+                if(snapshot.val()){
+                    Object.keys(snapshot.val()).forEach(l => {
+                        if (l !== "linkschild"){
+                            console.log(l);
+                            var linkId = 'links/' + l;
+                            var linksIdRef = dbRef.ref(linkId);
 
-                        linksIdRef.on('value', (snapshot) => {
-                            var schema = snapshot.val();
-                            // console.log(schema);
-                            if (schema != null) {
-                                origin = schema["origin"];
-                                dest = schema["dest"];
-                            }
-                            });
-                        linkTuple = [origin, dest];
-                        tlinks.push(linkTuple);
-                    }
-                    
-                });
+                            linksIdRef.on('value', (snapshot) => {
+                                var schema = snapshot.val();
+                                // console.log(schema);
+                                if (schema != null) {
+                                    origin = schema["origin"];
+                                    dest = schema["dest"];
+                                }
+                                });
+                            linkTuple = [origin, dest];
+                            tlinks.push(linkTuple);
+                        }
+                        
+                    });
             }
             this.setState({links:tlinks});
             // console.log(this.state.links);
@@ -115,6 +115,7 @@ class Grid extends Component {
        this.linkTuple.push(cardId);
       if(this.linkTuple.length === 2){
           var tLinks = this.state.links;
+<<<<<<< HEAD
           var linkTuple = this.linkTuple;
           var id = linkTuple[0] + linkTuple[1];
           var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
@@ -124,6 +125,12 @@ class Grid extends Component {
           // console.log(linkTuple);
           var pathToLink = "/links/" + id;
           firebase.database().ref().child(pathToLink).set(schema);
+=======
+          tLinks.push(this.linkTuple);
+
+          var pathToLink = "/links/";
+          firebase.database().ref().child(pathToLink).set("");
+>>>>>>> cbb20d2... half way to store links
 
           this.setState({
               links: tLinks,
