@@ -7,9 +7,20 @@ class Card extends Component {
   constructor(props){
     super(props);
     this.state = {
-      textarea : `Multiline example
-  text value`
+      textarea : `Loading...`
     };
+  }
+
+  componentWillMount() {
+    this.getCardNameFromDB();
+  }
+
+  getCardNameFromDB() {
+    var cardNamePath = "/cards/" + this.props.cardId + "/name/";
+    let thisCardNameRef = firebase.database().ref(cardNamePath);
+    thisCardNameRef.on('value', (snapshot) => {
+      this.setState({textarea: snapshot.val()})
+    });
   }
 
   virtualServerCallback = (newState) => {
@@ -18,18 +29,18 @@ class Card extends Component {
 
   changeState = (newState) => {
     this.setState(newState);
+    var cardNamePath = "/cards/" + this.props.cardId + "/name/";
+    firebase.database().ref().child(cardNamePath).set(newState.textarea);
+    return
   };
 
   isStringAcceptable = (string) => {
     return (string.length >= 1);  // Minimum 4 letters long
   };
 
-   CardsNametoDB(CardId){
-        var schema = "/cards/" + CardId + "/name/";
-        this.isStringAcceptable(this.state.textarea);
-        firebase.database().ref().child(schema).set(this.state.textarea);
-        return
-    }
+  validateAndUpdateDB(){
+      this.isStringAcceptable(this.state.textarea);
+  }
 
   render() {
     return (
@@ -45,15 +56,15 @@ class Card extends Component {
               src={require('./icons/iconmonstr-x-mark.svg')}
               onClick={this.props.deletefromList}
               alt="Delete Button"/>
-            {this.props.cardId}
-            <div>
+            <div className="CardText">
             <RIETextArea
-            value={this.state.textarea}
-            change={this.virtualServerCallback}
-            propName="textarea"
-            validate={this.CardsNametoDB(this.props.cardId)}
-            classLoading="loading"
-            classInvalid="invalid"/>
+              value={this.state.textarea}
+              change={this.virtualServerCallback}
+              propName="textarea"
+              validate={this.validateAndUpdateDB()}
+              classLoading="loading"
+              classInvalid="invalid"/>
+
             </div>
             <img
               className="linkOriginButton"

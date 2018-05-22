@@ -36,8 +36,8 @@ class Grid extends Component {
 
             thisSectionRef.on('value', (snapshot) => {
                 let tCards = this.state.cards;
-                    tCards[sectionName] = Object.keys(snapshot.val());
-                    this.setState({ cards : tCards})
+                tCards[sectionName] = Object.keys(snapshot.val());
+                this.setState({ cards : tCards})
             });
         });
     }
