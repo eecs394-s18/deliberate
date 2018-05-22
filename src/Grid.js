@@ -36,7 +36,7 @@ class Grid extends Component {
 
             thisSectionRef.on('value', (snapshot) => {
                 let tCards = this.state.cards;
-                tCards[sectionName] = Object.keys(snapshot.val());
+                if(snapshot.val()) tCards[sectionName] = Object.keys(snapshot.val());
                 this.setState({ cards : tCards})
             });
         });
@@ -89,6 +89,10 @@ class Grid extends Component {
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
         firebase.database().ref().child(pathToCard).remove();
+        let tCards = this.state.cards;
+        let index = tCards[sectionId].indexOf(cardId);
+        if(index != -1) tCards[sectionId].splice(index, 1);
+        this.setState({ cards : tCards})
         return
     }
 
