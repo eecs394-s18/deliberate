@@ -12,7 +12,13 @@
     position: relative;
 }
 
+.CardText {
+    text-align: center;
+    margin-right: 30px;
+}
+
 .deleteButton {
+    margin-right: -10px;
     float: right;
 }
 
