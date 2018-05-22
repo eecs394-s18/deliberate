@@ -18,8 +18,6 @@ class Grid extends Component {
                 "Solutions": []
             },
             meetingId: "1",
-            textarea : `Multiline example
-  text value`,
             links: [],
         };
         this.addToList = this.addToList.bind(this);
@@ -59,13 +57,13 @@ class Grid extends Component {
         var tCards = this.state.cards;
         var max = 0;
         tCards[sectionId].forEach(element => {
-            var thiscardindex = element.substring(1,);
+            var thiscardindex = element.substring(3,);
             if (max < thiscardindex){
                 max = thiscardindex;
             }
         });
         var newCardIndex = parseInt(max, 10)+1;
-        var newCardId = "M" + meetingId + CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
+        var newCardId = "M" + this.state.meetingId + CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
         this.UpdateCardsForDB(sectionId, newCardId);
     }
 
