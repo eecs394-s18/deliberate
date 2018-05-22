@@ -19,6 +19,9 @@ class Grid extends Component {
             },
             meetingId: "1",
             links: [],
+            name: "vhcnf",
+            votes: "hihta"
+
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
@@ -42,8 +45,9 @@ class Grid extends Component {
     UpdateCardsForDB(sectionId, newCardId){
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
         var pathToCard = "/cards/" + newCardId;
+        var schema = {"links": {"incoming": "undefined", "outgoing": "undefined"}, "name":this.state.name, "votes": this.state.votes}
         firebase.database().ref().child(pathToMeeting).set("true");
-        firebase.database().ref().child(pathToCard).set("true");
+        firebase.database().ref().child(pathToCard).set(schema);
         return
     }
 
