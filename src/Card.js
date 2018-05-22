@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Card.css';
 import {RIETextArea} from 'riek'
+import firebase from './firebase/FirebaseConfig';
 
 class Card extends Component {
   constructor(props){
@@ -23,6 +24,13 @@ class Card extends Component {
     return (string.length >= 1);  // Minimum 4 letters long
   };
 
+   CardsNametoDB(CardId){
+        var schema = "/cards/" + CardId + "/name/";
+        this.isStringAcceptable(this.state.textarea);
+        firebase.database().ref().child(schema).set(this.state.textarea);
+        return
+    }
+
   render() {
     return (
       <div className="Card">
@@ -43,7 +51,7 @@ class Card extends Component {
             value={this.state.textarea}
             change={this.virtualServerCallback}
             propName="textarea"
-            validate={this.isStringAcceptable}
+            validate={this.CardsNametoDB(this.props.cardId)}
             classLoading="loading"
             classInvalid="invalid"/>
             </div>
