@@ -55,9 +55,13 @@ class Card extends Component {
     return (string.length >= 1);  // Minimum 4 letters long
   };
 
-  validateAndUpdateDB(){
-      this.isStringAcceptable(this.state.textarea);
-  }
+   CardsNametoDB(CardId){
+        var schema = "/cards/" + CardId + "/name/";
+        this.isStringAcceptable(this.state.textarea);
+        firebase.database().ref().child(schema).set(this.state.textarea);
+        return
+    }
+
 
   render() {
     return (
@@ -74,7 +78,14 @@ class Card extends Component {
               src={require('./icons/iconmonstr-x-mark.svg')}
               onClick={this.props.deletefromList}
               alt="Delete Button"/>
-            <div className="CardText">
+            <div>
+            <RIETextArea
+            value={this.state.textarea}
+            change={this.virtualServerCallback}
+            propName="textarea"
+            validate={this.CardsNametoDB(this.props.cardId)}
+            classLoading="loading"
+            classInvalid="invalid"/>
             </div>
             <img
               className="linkOriginButton"

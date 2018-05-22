@@ -45,7 +45,38 @@ class Grid extends Component {
                     tCards[sectionName] = cardIds;
                 }
                 this.setState({ cards : tCards})
+
             });
+            let linkPath = 'links/';
+        let linksRef = dbRef.ref(linkPath);
+
+        linksRef.on('value', (snapshot) => {
+            var tlinks = [];
+            var origin, dest;
+            var linkTuple;
+            if(snapshot.val()){
+                Object.keys(snapshot.val()).forEach(l => {
+                    if (l !== "linkschild"){
+                        console.log(l);
+                        var linkId = 'links/' + l;
+                        var linksIdRef = dbRef.ref(linkId);
+
+                        linksIdRef.on('value', (snapshot) => {
+                            var schema = snapshot.val();
+                            // console.log(schema);
+                            if (schema != null) {
+                                origin = schema["origin"];
+                                dest = schema["dest"];
+                            }
+                            });
+                        linkTuple = [origin, dest];
+                        tlinks.push(linkTuple);
+                    }
+                    
+                });
+            }
+            this.setState({links:tlinks});
+            // console.log(this.state.links);
         });
     }
 
@@ -81,18 +112,37 @@ class Grid extends Component {
 
 
     drawLink(cardId) {
-      this.linkTuple.push(cardId);
+       this.linkTuple.push(cardId);
       if(this.linkTuple.length === 2){
           var tLinks = this.state.links;
-          tLinks.push(this.linkTuple);
+          var linkTuple = this.linkTuple;
+          var id = linkTuple[0] + linkTuple[1];
+          var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
+          // console.log("2");
+          // console.log(tLinks);
+          tLinks.push(linkTuple);
+          // console.log(linkTuple);
+          var pathToLink = "/links/" + id;
+          firebase.database().ref().child(pathToLink).set(schema);
+
           this.setState({
               links: tLinks,
           });
           this.linkTuple =[];
       }
+      return
     }
 
     deletefromList(sectionId, cardId) {
+        this.state.links.forEach(e => {
+            var pathtolink = 'links/' + e[0] + e[1];
+            if(e[0] === cardId){
+                firebase.database().ref().child(pathtolink).remove();
+            }
+            else if (e[1] === cardId){
+                firebase.database().ref().child(pathtolink).remove();
+            }
+        });
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
