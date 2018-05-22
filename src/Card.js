@@ -78,7 +78,7 @@ class Card extends Component {
               src={require('./icons/iconmonstr-x-mark.svg')}
               onClick={this.props.deletefromList}
               alt="Delete Button"/>
-            <div>
+            <div className="CardText">
             <RIETextArea
               value={this.state.textarea}
               change={this.virtualServerCallback}
@@ -86,6 +86,7 @@ class Card extends Component {
               validate={this.validateAndUpdateDB(this.props.cardId)}
               classLoading="loading"
               classInvalid="invalid"/>
+
             </div>
             <img
               className="linkOriginButton"
