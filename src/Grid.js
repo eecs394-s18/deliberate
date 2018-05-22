@@ -17,12 +17,16 @@ class Grid extends Component {
                 "Problems": [],
                 "Solutions": []
             },
+            meetingId: "1",
+            textarea : `Multiline example
+  text value`,
             links: [],
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
         this.drawLink = this.drawLink.bind(this);
     }
+
 
     listenToCardsForMeetingFromDB(dbRef) {
         CONSTANTS.sectionNames.forEach(sectionName => {
@@ -36,6 +40,15 @@ class Grid extends Component {
             });
         });
     }
+
+    UpdateCardsForDB(sectionId, newCardId){
+        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
+        var pathToCard = "/cards/" + newCardId;
+        firebase.database().ref().child(pathToMeeting).set("true");
+        firebase.database().ref().child(pathToCard).set("true");
+        return
+    }
+
 
     componentWillMount() {
         const dbRef = firebase.database();
@@ -52,11 +65,8 @@ class Grid extends Component {
             }
         });
         var newCardIndex = parseInt(max, 10)+1;
-        var newCardId = CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
-        tCards[sectionId].push(newCardId);
-        this.setState({
-            cards: tCards,
-        });
+        var newCardId = "M" + meetingId + CONSTANTS.sectionPrefix[sectionId] + newCardIndex;
+        this.UpdateCardsForDB(sectionId, newCardId);
     }
 
 
@@ -73,11 +83,11 @@ class Grid extends Component {
     }
 
     deletefromList(sectionId, cardId) {
-        var tCards = this.state.cards;
-        tCards[sectionId].splice( tCards[sectionId].indexOf(cardId), 1 );
-        this.setState({
-            cards: tCards,
-        });
+        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
+        var pathToCard = "/cards/" + cardId;
+        firebase.database().ref().child(pathToMeeting).remove();
+        firebase.database().ref().child(pathToCard).remove();
+        return
     }
 
     render() {
@@ -91,8 +101,7 @@ class Grid extends Component {
                     cards={this.state.cards[sectionTitle]}
                     addToList= {() => this.addToList(sectionTitle)}
                     deletefromList= {this.deletefromList}
-                    drawLink = {this.drawLink}
-                />
+                    drawLink = {this.drawLink}/>
             )};
             {this.state.links.map((t) =>
                 <LineTo from={t[0]} to={t[1]} />
