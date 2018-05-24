@@ -21,11 +21,14 @@ class Grid extends Component {
             links: [],
             name: "vhcnf",
             votes: "hihta"
-
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
         this.drawLink = this.drawLink.bind(this);
+    }
+
+    componentDidMount() {
+        console.log(this.props.match.params.number);
     }
 
 
