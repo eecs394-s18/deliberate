@@ -41,17 +41,47 @@ class Grid extends Component {
             });
 
         });
-        let linkId = 'links/';
-        let linksRef = dbRef.ref(linkId);
+        let linkPath = 'links/';
+        let linksRef = dbRef.ref(linkPath);
 
         linksRef.on('value', (snapshot) => {
             let tlinks = this.state.links;
+            var origin, dest;
+            var linkTuple;
 
             Object.keys(snapshot.val()).forEach(l => {
-                tlinks.push(l);
+                var linkId = 'links/' + l;
+                var linksIdRef = dbRef.ref(linkId);
+                linksIdRef.on('value', (snapshot) => {
+                    Object.keys(snapshot.val()).forEach(l => {
+                        var valPath = linkId + '/' + l;
+                        if (l === "origin"){
+                            console.log(valPath);
+                            var originRef = dbRef.ref(valPath);
+                            originRef.on('value', (snapshot) => {
+                                origin = snapshot.val();
+                                console.log(origin);
+                            });
+                        }
+                        else if (l === "dest"){
+                            console.log(valPath);
+                            var destRef = dbRef.ref(valPath);
+                            destRef.on('value', (snapshot) => {
+                                dest = snapshot.val();
+                                console.log(dest);
+                            });
+                        }
+                        else{
+                        }
+                        console.log(l);
+                        });
+                    });
+                linkTuple = [origin, dest];
+                console.log(linkTuple);
+                tlinks.push(linkTuple);
             });
             this.setState({links:tlinks});
-            console.log(this.state.links);
+            // console.log(this.state.links);
         });
     }
 
@@ -89,16 +119,25 @@ class Grid extends Component {
       this.linkTuple.push(cardId);
       if(this.linkTuple.length === 2){
           var tLinks = this.state.links;
-          tLinks.push(this.linkTuple);
-
-          var pathToLink = "/links/";
-          firebase.database().ref().child(pathToLink).set("");
+          var linkTuple = this.linkTuple;
+          var id = linkTuple[0] + linkTuple[1];
+          var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
+          
+          // schema[id] = {}
+          // schema[id]["origin"] = linkTuple[0];
+          // schema[id]["dest"] = linkTuple[1];
+          // schema[id]["status"] = "positive";
+          tLinks.push(linkTuple);
+          console.log(linkTuple);
+          var pathToLink = "/links/" + id;
+          firebase.database().ref().child(pathToLink).set(schema);
 
           this.setState({
               links: tLinks,
           });
           this.linkTuple =[];
       }
+      return
     }
 
     deletefromList(sectionId, cardId) {
