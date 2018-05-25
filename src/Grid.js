@@ -52,32 +52,15 @@ class Grid extends Component {
             Object.keys(snapshot.val()).forEach(l => {
                 var linkId = 'links/' + l;
                 var linksIdRef = dbRef.ref(linkId);
+
                 linksIdRef.on('value', (snapshot) => {
-                    Object.keys(snapshot.val()).forEach(l => {
-                        var valPath = linkId + '/' + l;
-                        if (l === "origin"){
-                            console.log(valPath);
-                            var originRef = dbRef.ref(valPath);
-                            originRef.on('value', (snapshot) => {
-                                origin = snapshot.val();
-                                console.log(origin);
-                            });
-                        }
-                        else if (l === "dest"){
-                            console.log(valPath);
-                            var destRef = dbRef.ref(valPath);
-                            destRef.on('value', (snapshot) => {
-                                dest = snapshot.val();
-                                console.log(dest);
-                            });
-                        }
-                        else{
-                        }
-                        console.log(l);
-                        });
+                    var schema = snapshot.val();
+                    // console.log(schema);
+                    origin = schema["origin"];
+                    dest = schema["dest"];
                     });
                 linkTuple = [origin, dest];
-                console.log(linkTuple);
+                // console.log(linkTuple);
                 tlinks.push(linkTuple);
             });
             this.setState({links:tlinks});
