@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import styles from './Meeting.css'
+import styles from './Meeting.css';
+import firebase from './firebase/FirebaseConfig';
+
 class Meeting extends Component {
     constructor(props) {
         super(props);
@@ -14,9 +16,27 @@ class Meeting extends Component {
         this.handleMemberPasscodeChange = this.handleMemberPasscodeChange.bind(this);
     }
 
-
     createMeetingForm(e) {
-      console.log(this.state.meetingName);
+      const dbRef = firebase.database();
+      var numMeetingsRef = dbRef.ref("/meetings/numMeetings");
+      numMeetingsRef.once('value', (snapshot) => {
+        var newMeetingNum = snapshot.val() + 1;
+        console.log(newMeetingNum)
+        var pathToNewMeeting = "/meetings/" + newMeetingNum;
+        var emptyMeetingBlob = { "Goals" : { "default" : "placeholder" },
+            "Problems" : { "default" : "placeholder" }, "Solutions" : { "default" : "placeholder" },
+            "Values" : { "default" : "placeholder" }, "links" : { "default" : "placeholder" },
+            "name" : this.state.meetingName, "adminPasscode" : this.state.adminPasscode,
+            "memberPasscode" : this.state.memberPasscode };
+        firebase.database().ref().child(pathToNewMeeting).set(emptyMeetingBlob);
+        numMeetingsRef.set(newMeetingNum);
+
+        var hostname = window.location.href.split("/")[2];
+        var link = hostname + "/meeting/" + newMeetingNum;
+        console.log(link);
+
+        // DISPLAY LINK HERE
+      });
       e.preventDefault();
     }
 
