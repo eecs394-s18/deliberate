@@ -45,7 +45,6 @@ class Grid extends Component {
                     tCards[sectionName] = cardIds;
                 }
                 this.setState({ cards : tCards})
-
             });
             let linkPath = 'links/';
             let linksRef = dbRef.ref(linkPath);
@@ -116,6 +115,7 @@ class Grid extends Component {
       if(this.linkTuple.length === 2){
           var tLinks = this.state.links;
 <<<<<<< HEAD
+<<<<<<< HEAD
           var linkTuple = this.linkTuple;
           var id = linkTuple[0] + linkTuple[1];
           var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
@@ -131,6 +131,20 @@ class Grid extends Component {
           var pathToLink = "/links/";
           firebase.database().ref().child(pathToLink).set("");
 >>>>>>> cbb20d2... half way to store links
+=======
+          var linkTuple = this.linkTuple;
+          var id = linkTuple[0] + linkTuple[1];
+          var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
+          
+          // schema[id] = {}
+          // schema[id]["origin"] = linkTuple[0];
+          // schema[id]["dest"] = linkTuple[1];
+          // schema[id]["status"] = "positive";
+          tLinks.push(linkTuple);
+          console.log(linkTuple);
+          var pathToLink = "/links/" + id;
+          firebase.database().ref().child(pathToLink).set(schema);
+>>>>>>> 1dd62c5... sync links with firebase
 
           this.setState({
               links: tLinks,
