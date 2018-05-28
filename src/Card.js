@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './Card.css';
 import {RIETextArea} from 'riek'
 import firebase from './firebase/FirebaseConfig';
+import ReactDom from 'react-dom';
+import Popup from 'reactjs-popup';
 
 class Card extends Component {
   constructor(props){
@@ -41,11 +43,56 @@ class Card extends Component {
   validateAndUpdateDB(){
       this.isStringAcceptable(this.state.textarea);
   }
+  cardClick(){
+    alert('I am alert, nice to meet you');
+  }
 
   render() {
     return (
-      <div className="Card">
+      <div className="Card" >
         <div className = {this.props.cardId}>
+        <Popup trigger={<button className="button"> Open Modal </button>} modal>
+    {close => (
+      <div className="modal">
+        <a className="close" onClick={close}>
+          &times;
+        </a>
+        <div className="header"> Modal Title </div>
+        <div className="content">
+          {" "}
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque, a nostrum.
+          Dolorem, repellat quidem ut, minima sint vel eveniet quibusdam voluptates
+          delectus doloremque, explicabo tempore dicta adipisci fugit amet dignissimos?
+          <br />
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur sit
+          commodi beatae optio voluptatum sed eius cumque, delectus saepe repudiandae
+          explicabo nemo nam libero ad, doloribus, voluptas rem alias. Vitae?
+        </div>
+        <div className="actions">
+          <Popup
+            trigger={<button className="button"> Trigger </button>}
+            position="top center"
+            closeOnDocumentClick
+          >
+            <span>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni omnis delectus
+              nemo, maxime molestiae dolorem numquam mollitia, voluptate ea, accusamus excepturi
+              deleniti ratione sapiente! Laudantium, aperiam doloribus. Odit, aut.
+            </span>
+          </Popup>
+          <button
+            className="button"
+            onClick={() => {
+              console.log('modal closed ')
+              close()
+            }}
+          >
+            close modal
+          </button>
+      </div>
+      </div>
+    )}
+  </Popup>
             <img
               className="linkDestButton"
               src={require('./icons/plusNoBackground.svg')}
@@ -57,14 +104,6 @@ class Card extends Component {
               onClick={this.props.deletefromList}
               alt="Delete Button"/>
             <div className="CardText">
-            <RIETextArea
-              value={this.state.textarea}
-              change={this.virtualServerCallback}
-              propName="textarea"
-              validate={this.validateAndUpdateDB()}
-              classLoading="loading"
-              classInvalid="invalid"/>
-
             </div>
             <img
               className="linkOriginButton"
