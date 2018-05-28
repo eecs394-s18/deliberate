@@ -94,7 +94,7 @@ class Grid extends Component {
         firebase.database().ref().child(pathToCard).remove();
         let tCards = this.state.cards;
         let index = tCards[sectionId].indexOf(cardId);
-        if(index != -1) tCards[sectionId].splice(index, 1);
+        if(index !== -1) tCards[sectionId].splice(index, 1);
         this.setState({ cards : tCards})
         return
     }
