@@ -75,7 +75,6 @@ class Grid extends Component {
                 // });
                 if ( !(linkTuple in tlinks)) {
                     tlinks.push(linkTuple);
-                    console.log("hi");
                 }
                 
             });
