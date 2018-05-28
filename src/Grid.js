@@ -56,12 +56,25 @@ class Grid extends Component {
                 linksIdRef.on('value', (snapshot) => {
                     var schema = snapshot.val();
                     // console.log(schema);
-                    origin = schema["origin"];
-                    dest = schema["dest"];
+                    if (schema != null) {
+                        origin = schema["origin"];
+                        dest = schema["dest"];
+                    }
                     });
                 linkTuple = [origin, dest];
                 // console.log(linkTuple);
-                tlinks.push(linkTuple);
+                // tlinks.forEach(tuple => {
+                //     if (tuple === linkTuple){
+                //         var index = tlinks.indexOf(tuple);
+                //         tlinks.splice(index, 1); 
+                //         console.log("fuck");
+                //     }
+                // });
+                if ( !(linkTuple in tlinks)) {
+                    tlinks.push(linkTuple);
+                    console.log("hi");
+                }
+                
             });
             this.setState({links:tlinks});
             // console.log(this.state.links);
@@ -124,6 +137,26 @@ class Grid extends Component {
     }
 
     deletefromList(sectionId, cardId) {
+        var Links = this.state.links;
+        Links.forEach(e => {
+            var pathtolink = 'links/' + e[0] + e[1];
+            var index = Links.indexOf(e);
+       
+            if(e[0] === cardId){
+                console.log(Links);
+                firebase.database().ref().child(pathtolink).remove();
+                Links.splice(index, 1); 
+            }
+            else if (e[1] === cardId){
+                console.log(Links);
+                firebase.database().ref().child(pathtolink).remove();
+                Links.splice(index, 1); 
+            }
+        });
+        this.setState({
+              links: Links,
+          });
+        console.log(this.state.links);
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
