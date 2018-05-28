@@ -1,5 +1,5 @@
 .Card {
-    z-index: 50;
+    z-index: 2;
     width: 150px;
     height: 80px;
     background-color: whitesmoke;
@@ -11,7 +11,15 @@
     vertical-align: top;
     position: relative;
 }
-
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    opacity:0.4；
+  }
 .CardText {
     text-align: center;
     margin-right: 30px;

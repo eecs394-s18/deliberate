@@ -112,9 +112,12 @@ class Grid extends Component {
                     deletefromList= {this.deletefromList}
                     drawLink = {this.drawLink}/>
             )};
+            <div className = "Lines">
             {this.state.links.map((t) =>
                 <LineTo from={t[0]} to={t[1]} />
-            )};
+                )};
+            </div>
+            
         </div>
         );
     }

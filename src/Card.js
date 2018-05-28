@@ -4,15 +4,44 @@ import {RIETextArea} from 'riek'
 import firebase from './firebase/FirebaseConfig';
 import ReactDom from 'react-dom';
 import Popup from 'reactjs-popup';
+import Modal from 'react-modal';
 
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)',
+    
+  }
+};
 class Card extends Component {
   constructor(props){
     super(props);
     this.state = {
-      textarea : `Loading...`
+      textarea : `Loading...`,
+      modalIsOpen: false
     };
+    this.openModal = this.openModal.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+  openModal() {
+    this.setState({modalIsOpen: true});
   }
 
+  afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    this.subtitle.style.color = '#f00';
+  }
+
+  closeModal() {
+    this.setState({modalIsOpen: false});
+  }
+  
   componentWillMount() {
     this.getCardNameFromDB();
   }
@@ -44,55 +73,13 @@ class Card extends Component {
       this.isStringAcceptable(this.state.textarea);
   }
   cardClick(){
-    alert('I am alert, nice to meet you');
+    this.setState({modalIsOpen: true});
   }
-
   render() {
     return (
-      <div className="Card" >
-        <div className = {this.props.cardId}>
-        <Popup trigger={<button className="button"> Open Modal </button>} modal>
-    {close => (
-      <div className="modal">
-        <a className="close" onClick={close}>
-          &times;
-        </a>
-        <div className="header"> Modal Title </div>
-        <div className="content">
-          {" "}
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque, a nostrum.
-          Dolorem, repellat quidem ut, minima sint vel eveniet quibusdam voluptates
-          delectus doloremque, explicabo tempore dicta adipisci fugit amet dignissimos?
-          <br />
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur sit
-          commodi beatae optio voluptatum sed eius cumque, delectus saepe repudiandae
-          explicabo nemo nam libero ad, doloribus, voluptas rem alias. Vitae?
-        </div>
-        <div className="actions">
-          <Popup
-            trigger={<button className="button"> Trigger </button>}
-            position="top center"
-            closeOnDocumentClick
-          >
-            <span>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni omnis delectus
-              nemo, maxime molestiae dolorem numquam mollitia, voluptate ea, accusamus excepturi
-              deleniti ratione sapiente! Laudantium, aperiam doloribus. Odit, aut.
-            </span>
-          </Popup>
-          <button
-            className="button"
-            onClick={() => {
-              console.log('modal closed ')
-              close()
-            }}
-          >
-            close modal
-          </button>
-      </div>
-      </div>
-    )}
-  </Popup>
+    <div className="Card" onClick={this.openModal}>
+        <div className = {this.props.cardId} >
+
             <img
               className="linkDestButton"
               src={require('./icons/plusNoBackground.svg')}
@@ -111,6 +98,26 @@ class Card extends Component {
               onClick={this.props.drawLink}
               alt="Link Origin Button"/>
          </div>
+         <Modal
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+          overlayClassName="Overlay"
+        >
+
+          <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
+          <button onClick={this.closeModal}>close</button>
+          <div>I am a modal</div>
+          <form>
+            <input />
+            <button>tab navigation</button>
+            <button>stays</button>
+            <button>inside</button>
+            <button>the modal</button>
+          </form>
+        </Modal>
       </div>
 
     );
@@ -118,3 +125,4 @@ class Card extends Component {
 }
 
 export default Card;
+
