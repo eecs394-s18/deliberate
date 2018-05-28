@@ -155,6 +155,7 @@ class Grid extends Component {
     }
 
     deletefromList(sectionId, cardId) {
+<<<<<<< HEAD
         this.state.links.forEach(e => {
             var pathtolink = 'links/' + e[0] + e[1];
             if(e[0] === cardId){
@@ -164,6 +165,28 @@ class Grid extends Component {
                 firebase.database().ref().child(pathtolink).remove();
             }
         });
+=======
+        var Links = this.state.links;
+        Links.forEach(e => {
+            var pathtolink = 'links/' + e[0] + e[1];
+            var index = Links.indexOf(e);
+       
+            if(e[0] === cardId){
+                console.log(Links);
+                firebase.database().ref().child(pathtolink).remove();
+                Links.splice(index, 1); 
+            }
+            else if (e[1] === cardId){
+                console.log(Links);
+                firebase.database().ref().child(pathtolink).remove();
+                Links.splice(index, 1); 
+            }
+        });
+        this.setState({
+              links: Links,
+          });
+        console.log(this.state.links);
+>>>>>>> d8b7fe3... delete links when card removed
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
