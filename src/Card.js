@@ -103,7 +103,7 @@ class Card extends Component {
                 <FontAwesome.FaThumbsUp/>
                 <FontAwesome.FaThumbsDown/>
                 <br/>
-             <button onClick={this.handleCloseModal}>Close Modal</button>
+             <button onClick={this.handleCloseModal}>Close card detail</button>
            </ReactModal>
          </div>
       </div>
