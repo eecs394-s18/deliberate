@@ -8,15 +8,11 @@
     "react-dom": "^16.3.2",
     "react-icons": "^2.2.7",
     "react-lineto": "^3.1.2",
-<<<<<<< HEAD
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4"
-=======
+    "react-scripts": "1.1.4",
     "react-modal": "^3.4.4",
     "react-popup": "^0.9.3",
-    "react-scripts": "1.1.4",
     "reactjs-popup": "^1.1.1"
->>>>>>> 6c97caa... z-index work
   },
   "scripts": {
     "start": "react-scripts start",

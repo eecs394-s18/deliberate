@@ -1,12 +1,5 @@
 .Grid {
     width: 100%;
-<<<<<<< HEAD
-    height: 100vh;
-=======
     height: 90%;
     z-index: -10;
-}
-.Lines{
-    z-index: 1;
->>>>>>> 6c97caa... z-index work
 }
