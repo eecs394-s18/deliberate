@@ -4,46 +4,31 @@ import {RIETextArea} from 'riek'
 import firebase from './firebase/FirebaseConfig';
 import ReactDom from 'react-dom';
 import Popup from 'reactjs-popup';
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
+import * as FontAwesome from 'react-icons/lib/fa'
 
 
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    
-  }
-};
 class Card extends Component {
   constructor(props){
     super(props);
     this.state = {
       textarea : `Loading...`,
-      modalIsOpen: false
+      showModal: false
     };
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
-  openModal() {
-    this.setState({modalIsOpen: true});
-  }
-
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
+  handleOpenModal() {
+    this.setState({showModal: true});
   }
 
-  closeModal() {
-    this.setState({modalIsOpen: false});
+  handleCloseModal() {
+    this.setState({showModal: false});
   }
-  
+
   componentWillMount() {
     this.getCardNameFromDB();
+    ReactModal.setAppElement('body');
   }
 
   getCardNameFromDB() {
@@ -72,12 +57,10 @@ class Card extends Component {
   validateAndUpdateDB(){
       this.isStringAcceptable(this.state.textarea);
   }
-  cardClick(){
-    this.setState({modalIsOpen: true});
-  }
+
   render() {
     return (
-    <div className="Card" onClick={this.openModal}>
+    <div className="Card" >
         <div className = {this.props.cardId} >
 
             <img
@@ -98,26 +81,31 @@ class Card extends Component {
               onClick={this.props.drawLink}
               alt="Link Origin Button"/>
          </div>
-         <Modal
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-          overlayClassName="Overlay"
-        >
-
-          <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
-          <button onClick={this.closeModal}>close</button>
-          <div>I am a modal</div>
-          <form>
-            <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-          </form>
-        </Modal>
+         <div>
+           <div className="CardText" onClick={this.handleOpenModal}>{this.state.textarea}</div>
+           <ReactModal
+              isOpen={this.state.showModal}
+              contentLabel="Minimal Modal Example"
+              className="Modal"
+              overlayClassName="Overlay">
+              <br/>
+              <br/>
+               <RIETextArea
+                className="detailTitle"
+                value={this.state.textarea}
+                change={this.virtualServerCallback}
+                propName="textarea"
+                validate={this.validateAndUpdateDB()}
+                classLoading="loading"
+                classInvalid="invalid"/>
+                <br/>
+                <br/>
+                <FontAwesome.FaThumbsUp/>
+                <FontAwesome.FaThumbsDown/>
+                <br/>
+             <button onClick={this.handleCloseModal}>Close Modal</button>
+           </ReactModal>
+         </div>
       </div>
 
     );
@@ -125,4 +113,3 @@ class Card extends Component {
 }
 
 export default Card;
-

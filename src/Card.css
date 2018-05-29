@@ -11,18 +11,10 @@
     vertical-align: top;
     position: relative;
 }
-  .Overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 50;
-    opacity:0.4；
-  }
+
 .CardText {
     text-align: center;
-    margin-right: 30px;
+    margin-right: 20px;
 }
 
 .deleteButton {
@@ -58,37 +50,28 @@
     right: 0;
 }
 
-.modal {
-    font-size: 12px;
-    z-index: 1000;
-  }
-  .modal > .header {
-    width: 100%;
-    border-bottom: 1px solid gray;
-    font-size: 18px;
+.detailTitle {
+    font-size: 30px;
+}
+
+.Modal {
     text-align: center;
-    padding: 5px;
-  }
-  .modal > .content {
-    width: 100%;
-    padding: 10px 5px;
-  }
-  .modal > .actions {
-    width: 100%;
-    padding: 10px 5px;
-    margin: auto;
-    text-align: center;
-  }
-  .modal > .close {
-    cursor: pointer;
+    align-items: center;
     position: absolute;
-    display: block;
-    padding: 2px 5px;
-    line-height: 20px;
-    right: -10px;
-    top: -10px;
-    font-size: 24px;
-    background: #ffffff;
-    border-radius: 18px;
-    border: 1px solid #cfcece;
-  }
+    top: 240px;
+    left: 240px;
+    right: 240px;
+    bottom: 240px;
+    background-color: #ffffff;
+    z-index: 3;
+}
+
+.Overlay {
+    z-index: 3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000099;
+}
