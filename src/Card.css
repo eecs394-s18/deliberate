@@ -1,5 +1,5 @@
 .Card {
-    z-index: 1000;
+    z-index: 2;
     width: 150px;
     height: 80px;
     background-color: whitesmoke;
@@ -14,7 +14,7 @@
 
 .CardText {
     text-align: center;
-    margin-right: 30px;
+    margin-right: 20px;
 }
 
 .deleteButton {
@@ -48,4 +48,33 @@
     margin-right: auto;
     left: 0;
     right: 0;
+}
+
+.detailTitle {
+    font-size: 30px;
+}
+
+.Modal {
+    text-align: center;
+    align-items: center;
+    position: absolute;
+    top: 240px;
+    left: 240px;
+    right: 240px;
+    bottom: 240px;
+    background-color: #ffffff;
+    z-index: 3;
+    border-style: solid;
+    border-width: 15px;
+    border-radius: 10px;
+}
+
+.Overlay {
+    z-index: 3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000099;
 }
