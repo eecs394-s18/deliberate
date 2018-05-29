@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import './Card.css';
 import {RIETextArea} from 'riek'
 import firebase from './firebase/FirebaseConfig';
-import ReactDom from 'react-dom';
-import Popup from 'reactjs-popup';
 import ReactModal from 'react-modal';
-import * as FontAwesome from 'react-icons/lib/fa'
+import {FaThumbsUp, FaThumbsDown} from 'react-icons/lib/fa'
 
 
 class Card extends Component {
@@ -100,8 +98,8 @@ class Card extends Component {
                 classInvalid="invalid"/>
                 <br/>
                 <br/>
-                <FontAwesome.FaThumbsUp/>
-                <FontAwesome.FaThumbsDown/>
+                <FaThumbsUp/>
+                <FaThumbsDown/>
                 <br/>
              <button onClick={this.handleCloseModal}>Close card detail</button>
            </ReactModal>
