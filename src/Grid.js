@@ -19,9 +19,9 @@ class Grid extends Component {
             },
             meetingId: "1",
             links: [],
-            name: "vhcnf",
+            name: "Click to enter text", //default card name
             votes: "hihta",
-            passcodeEntered: false,
+            passcodeEntered: false
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
@@ -29,21 +29,23 @@ class Grid extends Component {
         this.submit = this.submit.bind(this);
     }
 
-    componentDidMount() {
-        console.log(this.props.match.params.number);
-        this.setState({meetingId: this.props.match.params.number});
-        console.log(this.state.meetingId);
-    }
-
-
-    listenToCardsForMeetingFromDB(dbRef) {
+    listenToCardsForMeetingFromDB(dbRef, meetingId) {
         CONSTANTS.sectionNames.forEach(sectionName => {
-            let sectionRefString = 'meetings/1/'+sectionName;
+            let sectionRefString = 'meetings/'+meetingId+"/"+sectionName;
             let thisSectionRef = dbRef.ref(sectionRefString);
 
             thisSectionRef.on('value', (snapshot) => {
                 let tCards = this.state.cards;
-                if(snapshot.val()) tCards[sectionName] = Object.keys(snapshot.val());
+                if(snapshot.val()) {
+                    let cardIds = Object.keys(snapshot.val());
+                    // remove default
+                    var index = cardIds.indexOf("default");
+                    if (index > -1) {
+                        cardIds.splice(index, 1);
+                    }
+                    // --------------
+                    tCards[sectionName] = cardIds;
+                }
                 this.setState({ cards : tCards})
             });
         });
@@ -60,15 +62,16 @@ class Grid extends Component {
 
 
     componentWillMount() {
+        this.setState({meetingId: this.props.match.params.number});
         const dbRef = firebase.database();
-        this.listenToCardsForMeetingFromDB(dbRef);
+        this.listenToCardsForMeetingFromDB(dbRef, this.props.match.params.number);
     }
 
     addToList(sectionId) {
         var tCards = this.state.cards;
         var max = 0;
         tCards[sectionId].forEach(element => {
-            var thiscardindex = element.substring(3,);
+            var thiscardindex = element.match(/\d+/g)[1];
             if (max < thiscardindex){
                 max = thiscardindex;
             }
