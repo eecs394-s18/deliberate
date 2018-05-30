@@ -3,18 +3,21 @@ import './Card.css';
 import {RIETextArea} from 'riek'
 import firebase from './firebase/FirebaseConfig';
 import ReactModal from 'react-modal';
-import {FaThumbsUp, FaThumbsDown} from 'react-icons/lib/fa'
-
+import {FaThumbsUp, FaThumbsDown,FaFileTextO,FaAlignJustify} from 'react-icons/lib/fa'
 
 class Card extends Component {
   constructor(props){
     super(props);
     this.state = {
       textarea : `Loading...`,
-      showModal: false
+      showModal: false,
+      detailarea : `Put some detail information`,
+      isThumb: 0,
     };
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.clickThumpup = this.clickThumpup.bind(this);
+    this.clickThumpdown = this.clickThumpdown.bind(this);
   }
   handleOpenModal() {
     this.setState({showModal: true});
@@ -59,6 +62,22 @@ class Card extends Component {
       this.isStringAcceptable(this.state.textarea);
   }
 
+  clickThumpup(){
+    // use setState doesn't work. So change state directly
+    if(this.state.isThumb === "1") {
+      this.state.isThumb =0;
+    }
+    this.state.isThumb =1;
+    console.log(this.state.isThumb);
+  }
+
+  clickThumpdown(){
+    if(this.state.isThumb === "-1") {
+      this.state.isThumb =0;
+    }
+    this.state.isThumb = -1;
+    console.log(this.state.isThumb);
+  }
   render() {
     return (
     <div className="Card" >
@@ -89,22 +108,43 @@ class Card extends Component {
               contentLabel="Minimal Modal Example"
               className="Modal"
               overlayClassName="Overlay">
-              <br/>
-              <br/>
-               <RIETextArea
-                className="detailTitle"
-                value={this.state.textarea}
-                change={this.virtualServerCallback}
-                propName="textarea"
-                validate={this.validateAndUpdateDB()}
-                classLoading="loading"
-                classInvalid="invalid"/>
-                <br/>
-                <br/>
-                <FaThumbsUp/>
-                <FaThumbsDown/>
-                <br/>
-             <button onClick={this.handleCloseModal}>Close card detail</button>
+              <div className="top">
+                <div className="topcontainer">
+                  <p className="subpageheader"> Detail Page</p>
+                  <p className="closebtn"  onClick={this.handleCloseModal}> Close</p>
+                </div> 
+              </div>
+              <div className="mainBox">
+                <div className="cardName">
+                  <div className="icons"> 
+                    <FaFileTextO className="icons"/>
+                  </div>
+                  
+                  <RIETextArea
+                    className="cardTitle"
+                    value={this.state.textarea}
+                    change={this.virtualServerCallback}
+                    propName="textarea"
+                    validate={this.validateAndUpdateDB()}
+                    classLoading="loading"
+                    classInvalid="invalid"/>
+                  </div>
+
+                  <div className="icons2"> 
+                    <FaAlignJustify className="icons"/>
+                  </div>
+                  
+                  <RIETextArea
+                    className="cardDetail"
+                    value={this.state.detailarea}
+                    change={this.virtualServerCallback}
+                    propName="textarea"
+                    validate={this.validateAndUpdateDB()}
+                    classLoading="loading"
+                    classInvalid="invalid"/>
+                  <FaThumbsUp className="Thumbup" onClick={this.clickThumpup} />
+                  <FaThumbsDown className="Thumbdown" onClick={this.clickThumpdown}/> 
+                </div>
            </ReactModal>
          </div>
       </div>
