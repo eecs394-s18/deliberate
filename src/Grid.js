@@ -97,25 +97,14 @@ class Grid extends Component {
     submit(e) {
         const dbRef = firebase.database();
         const queryString = "/meetings/" + this.props.match.params.number;
-        var verdict = dbRef.ref(queryString).once('value').then(function(snapshot) {
+
+        dbRef.ref(queryString).once('value').then((snapshot) => {
             var newState = false;
             const test = snapshot.val();
-            const member = document.getElementById("member");
-            const admin = document.getElementById("admin");
-            if (member) {
-                const value = document.getElementById("member").value;
-                newState = (test.memberPasscode === value);
-
-            } else {
-                const value = document.getElementById("admin").value;
-                newState = (test.memberPasscode === value);
-            }
-            return newState;
+            const value = document.getElementById("password").value;
+            newState = (test.memberPasscode === value);
+            this.setState({passcodeEntered: newState});
         });
-
-        if (verdict) {
-            this.setState({passcodeEntered: verdict});
-        }   
     }
 
     deletefromList(sectionId, cardId) {
