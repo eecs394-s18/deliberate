@@ -17,7 +17,7 @@ class Grid extends Component {
                 "Problems": [],
                 "Solutions": []
             },
-            meetingId: ["1"],
+            meetingId: "1",
             links: [],
             name: "Click to enter text", //default card name
             votes: "hihta"
@@ -62,7 +62,6 @@ class Grid extends Component {
 
                             linksIdRef.on('value', (snapshot) => {
                                 var schema = snapshot.val();
-                                // console.log(schema);
                                 if (schema != null) {
                                     origin = schema["origin"];
                                     dest = schema["dest"];
@@ -73,14 +72,14 @@ class Grid extends Component {
                         }
                         
                     });
-            }
+                }
             this.setState({links:tlinks});
-            // console.log(this.state.links);
+            });
         });
     }
 
     UpdateCardsForDB(sectionId, newCardId){
-        var pathToMeeting = "/meetings/" + this.state.meetingId[0] + "/" + sectionId + "/" + newCardId; 
+        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
         var pathToCard = "/cards/" + newCardId;
         var schema = {"links": {"incoming": "undefined", "outgoing": "undefined"}, "name":this.state.name, "votes": this.state.votes}
         firebase.database().ref().child(pathToMeeting).set("true");
@@ -111,25 +110,25 @@ class Grid extends Component {
 
 
     drawLink(cardId) {
-       this.linkTuple.push(cardId);
-      if(this.linkTuple.length === 2){
-          var tLinks = this.state.links;
-
-          var linkTuple = this.linkTuple;
-          var id = linkTuple[0] + linkTuple[1];
-          var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
-          // console.log("2");
-          // console.log(tLinks);
-          tLinks.push(linkTuple);
-          // console.log(linkTuple);
-          var pathToLink = "/links/" + id;
-          firebase.database().ref().child(pathToLink).set(schema);
-          this.setState({
-              links: tLinks,
-          });
-          this.linkTuple =[];
-      }
-      return
+        this.linkTuple.push(cardId);
+        if(this.linkTuple.length === 2){
+            if (this.linkTuple[0] === this.linkTuple[1]){
+                this.linkTuple =[];
+                return
+            }
+            var tLinks = this.state.links;
+            var linkTuple = this.linkTuple;
+            var id = linkTuple[0] + linkTuple[1];
+            var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
+            tLinks.push(linkTuple);
+            var pathToLink = "/links/" + id;
+            firebase.database().ref().child(pathToLink).set(schema);
+            this.setState({
+                links: tLinks,
+            });
+            this.linkTuple =[];
+         }
+        return
     }
 
     deletefromList(sectionId, cardId) {
@@ -154,7 +153,6 @@ class Grid extends Component {
     }
 
     render() {
-        console.log(this.state.links);
         return (
         <div className="Grid">
 
