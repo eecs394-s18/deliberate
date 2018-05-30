@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styles from './Meeting.css';
 import firebase from './firebase/FirebaseConfig';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import { connect } from 'react-redux';
+import { setID } from './actions/index.js';
 
 class Meeting extends Component {
     constructor(props) {
@@ -17,6 +19,10 @@ class Meeting extends Component {
         this.handleMeetingNameChange = this.handleMeetingNameChange.bind(this);
         this.handleAdminPasscodeChange = this.handleAdminPasscodeChange.bind(this);
         this.handleMemberPasscodeChange = this.handleMemberPasscodeChange.bind(this);
+    }
+
+    componentDidMount(){
+      console.log(this.prop)
     }
 
     createMeetingForm(e) {
@@ -64,7 +70,22 @@ class Meeting extends Component {
         alert("Copied the link: " + copyText.value);
     }
 
+    mapStateToProps(state) {
+      return {
+        currentTime: state.time.currentTime
+      }
+    }
+
+    mapDispatchToProps(dispatch) {
+        updateTime: () => dispatch(setID())
+    }
+
     render() {
+
+
+      
+
+
         return (
         <div className="bkg">
 
@@ -102,4 +123,8 @@ class Meeting extends Component {
     }
 }
 
-export default Meeting;
+export default connect(
+  this.mapStateToProps,
+  this.mapDispatchToProps,
+)(Meeting);
+
