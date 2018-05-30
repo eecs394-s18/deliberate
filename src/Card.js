@@ -30,6 +30,9 @@ class Card extends Component {
   }
 
   getCardNameFromDB() {
+    if (this.props.cardId === 'default') { // default is a placeholder card that shouldn't be displayed
+      console.error("default card shouldn't be displayed")
+    }
     var cardNamePath = "/cards/" + this.props.cardId + "/name/";
     let thisCardNameRef = firebase.database().ref(cardNamePath);
     thisCardNameRef.on('value', (snapshot) => {
