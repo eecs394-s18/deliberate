@@ -91,21 +91,23 @@ class Grid extends Component {
       }
     }
 
-    submit() {
+    submit(e) {
         const dbRef = firebase.database();
         const queryString = "/meetings/" + this.props.match.params.number;
-
         var verdict = dbRef.ref(queryString).once('value').then(function(snapshot) {
             var newState = false;
             const test = snapshot.val();
-            const inputField = document.getElementById("password");
-            if (inputField) {
-                const value = document.getElementById("password").value;
+            const member = document.getElementById("member");
+            const admin = document.getElementById("admin");
+            if (member) {
+                const value = document.getElementById("member").value;
+                newState = (test.memberPasscode === value);
+
+            } else {
+                const value = document.getElementById("admin").value;
                 newState = (test.memberPasscode === value);
             }
-
             return newState;
-
         });
 
         if (verdict) {
@@ -147,7 +149,8 @@ class Grid extends Component {
             ) : (
             <div id="bkg">
                 <h1> enter meeting passcode! </h1>
-                <input type="text" id="password" placeholder="password" />
+                <input type="text" id="admin" placeholder="Admin Password" />
+                <input type="text" id="member" placeholder="Member Password" />
                 <div id="btn" onClick={this.submit}> <div> submit </div> </div>
             </div>
             )
