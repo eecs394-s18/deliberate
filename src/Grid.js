@@ -27,19 +27,23 @@ class Grid extends Component {
         this.drawLink = this.drawLink.bind(this);
     }
 
-    componentDidMount() {
-        console.log(this.props.match.params.number);
-    }
-
-
-    listenToCardsForMeetingFromDB(dbRef) {
+    listenToCardsForMeetingFromDB(dbRef, meetingId) {
         CONSTANTS.sectionNames.forEach(sectionName => {
-            let sectionRefString = 'meetings/1/'+sectionName;
+            let sectionRefString = 'meetings/'+meetingId+"/"+sectionName;
             let thisSectionRef = dbRef.ref(sectionRefString);
 
             thisSectionRef.on('value', (snapshot) => {
                 let tCards = this.state.cards;
-                if(snapshot.val()) tCards[sectionName] = Object.keys(snapshot.val());
+                if(snapshot.val()) {
+                    let cardIds = Object.keys(snapshot.val());
+                    // remove default
+                    var index = cardIds.indexOf("default");
+                    if (index > -1) {
+                        cardIds.splice(index, 1);
+                    }
+                    // --------------
+                    tCards[sectionName] = cardIds;
+                }
                 this.setState({ cards : tCards})
             });
         });
@@ -56,8 +60,9 @@ class Grid extends Component {
 
 
     componentWillMount() {
+        this.setState({meetingId: this.props.match.params.number});
         const dbRef = firebase.database();
-        this.listenToCardsForMeetingFromDB(dbRef);
+        this.listenToCardsForMeetingFromDB(dbRef, this.props.match.params.number);
     }
 
     addToList(sectionId) {

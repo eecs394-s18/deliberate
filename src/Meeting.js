@@ -39,7 +39,6 @@ class Meeting extends Component {
         console.log(tLink);
 
         this.setState({link: tLink});
-        // DISPLAY LINK HERE
       });
       e.preventDefault();
     }
