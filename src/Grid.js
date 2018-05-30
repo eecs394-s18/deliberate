@@ -19,7 +19,7 @@ class Grid extends Component {
             },
             meetingId: "1",
             links: [],
-            name: "vhcnf",
+            name: "Click to enter text", //default card name
             votes: "hihta"
         };
         this.addToList = this.addToList.bind(this);
@@ -69,7 +69,7 @@ class Grid extends Component {
         var tCards = this.state.cards;
         var max = 0;
         tCards[sectionId].forEach(element => {
-            var thiscardindex = element.substring(3,);
+            var thiscardindex = element.match(/\d+/g)[1];
             if (max < thiscardindex){
                 max = thiscardindex;
             }
