@@ -17,7 +17,7 @@ class Grid extends Component {
                 "Problems": [],
                 "Solutions": []
             },
-            meetingId: "1",
+            meetingId: ["1"],
             links: [],
             name: "Click to enter text", //default card name
             votes: "hihta"
@@ -46,11 +46,69 @@ class Grid extends Component {
                 }
                 this.setState({ cards : tCards})
             });
+
+        });
+        let linkPath = 'links/';
+        let linksRef = dbRef.ref(linkPath);
+
+        linksRef.on('value', (snapshot) => {
+            var tlinks = [];
+            var origin, dest;
+            var linkTuple;
+
+            // if (!snapshot.val()) {
+            //     console.log("hi");
+            //     firebase.database().ref().child(linkPath).set({});
+            //     console.log(firebase.database().ref().child(/meetings/));
+            // }
+            if(snapshot.val()){
+                Object.keys(snapshot.val()).forEach(l => {
+                    if (l !== "linkschild"){
+                        console.log(l);
+                        var linkId = 'links/' + l;
+                        var linksIdRef = dbRef.ref(linkId);
+
+                        linksIdRef.on('value', (snapshot) => {
+                            var schema = snapshot.val();
+                            // console.log(schema);
+                            if (schema != null) {
+                                origin = schema["origin"];
+                                dest = schema["dest"];
+                            }
+                            });
+                        linkTuple = [origin, dest];
+                        tlinks.push(linkTuple);
+                        // console.log(linkTuple);
+                        // tlinks.forEach(tuple => {
+                        //     if (tuple === linkTuple){
+                        //         var index = tlinks.indexOf(tuple);
+                        //         tlinks.splice(index, 1); 
+                        //         console.log("fuck");
+                        //     }
+                        // });
+                        // var duplicate = 0;
+                        // for (var i = 0; i < tlinks.length; i++){
+                        //     if (tlinks[i][0] === linkTuple[0] ){
+                        //         if (tlinks[i][1] === linkTuple[1]){
+                        //             duplicate = 1
+                        //             break;
+                        //         }
+                        //     }
+                        // }
+                        // if (duplicate === 0){
+                        //     tlinks.push(linkTuple);
+                        // }
+                    }
+                    
+                });
+            }
+            this.setState({links:tlinks});
+            // console.log(this.state.links);
         });
     }
 
     UpdateCardsForDB(sectionId, newCardId){
-        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
+        var pathToMeeting = "/meetings/" + this.state.meetingId[0] + "/" + sectionId + "/" + newCardId; 
         var pathToCard = "/cards/" + newCardId;
         var schema = {"links": {"incoming": "undefined", "outgoing": "undefined"}, "name":this.state.name, "votes": this.state.votes}
         firebase.database().ref().child(pathToMeeting).set("true");
@@ -84,15 +142,39 @@ class Grid extends Component {
       this.linkTuple.push(cardId);
       if(this.linkTuple.length === 2){
           var tLinks = this.state.links;
-          tLinks.push(this.linkTuple);
+          var linkTuple = this.linkTuple;
+          var id = linkTuple[0] + linkTuple[1];
+          var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
+          
+          // schema[id] = {}
+          // schema[id]["origin"] = linkTuple[0];
+          // schema[id]["dest"] = linkTuple[1];
+          // schema[id]["status"] = "positive";
+          console.log("2");
+          console.log(tLinks);
+          tLinks.push(linkTuple);
+          console.log(linkTuple);
+          var pathToLink = "/links/" + id;
+          firebase.database().ref().child(pathToLink).set(schema);
+
           this.setState({
               links: tLinks,
           });
           this.linkTuple =[];
       }
+      return
     }
 
     deletefromList(sectionId, cardId) {
+        this.state.links.forEach(e => {
+            var pathtolink = 'links/' + e[0] + e[1];
+            if(e[0] === cardId){
+                firebase.database().ref().child(pathtolink).remove();
+            }
+            else if (e[1] === cardId){
+                firebase.database().ref().child(pathtolink).remove();
+            }
+        });
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
@@ -105,6 +187,7 @@ class Grid extends Component {
     }
 
     render() {
+        console.log(this.state.links);
         return (
         <div className="Grid">
 
