@@ -89,13 +89,14 @@
 }
 .Modal {
     position: absolute;
-    top: 100px;
-    left: 150px;
-    right: 150px;
-    bottom: 350px;
+    top: 25%;
+    left: 20%;
+    right: 20%;
+    bottom: 20%;
     background-color: #fefdff;
     z-index: 3;
 }
+
 
 .top {
     width: 100%;
@@ -140,6 +141,12 @@
     padding-left: 50px;
     font-size: 20px;
     cursor: pointer;
+}
+.voteNumber{
+    position: absolute;
+    top:350px;
+    left:200px; 
+    font-size: 20px;
 }
 .Overlay {
     z-index: 3;

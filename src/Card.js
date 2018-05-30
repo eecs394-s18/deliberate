@@ -13,6 +13,7 @@ class Card extends Component {
       showModal: false,
       detailarea : `Put some detail information`,
       isThumb: 0,
+      thumbN: 0,
     };
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -54,6 +55,13 @@ class Card extends Component {
     return
   };
 
+  detailServerCallback = (newState) =>{
+    //this.setState({this.stat});
+    var cardNamePath = "/cards/" + this.props.cardId + "/name/";
+    firebase.database().ref().child(cardNamePath).set(newState.textarea);
+    return
+  }
+
   isStringAcceptable = (string) => {
     return (string.length >= 1);  // Minimum 4 letters long
   };
@@ -64,19 +72,47 @@ class Card extends Component {
 
   clickThumpup(){
     // use setState doesn't work. So change state directly
-    if(this.state.isThumb === "1") {
+    var number = this.state.thumbN;
+    if(this.state.isThumb === 1) {
       this.state.isThumb =0;
+      number -=1;
+      document.getElementById("Thumbupid").style.color = "black";
+    }else if(this.state.isThumb === 0){
+      this.state.isThumb = 1;
+      number +=1;
+      document.getElementById("Thumbupid").style.color = "green";
+    }else{
+      this.state.isThumb = 1;
+      number+=2
+      document.getElementById("Thumbupid").style.color = "green";
+      document.getElementById("Thumbdownid").style.color = "black";
     }
-    this.state.isThumb =1;
+    // this.thumbRender();
+    this.setState({thumbN:number});
+    
     console.log(this.state.isThumb);
+    console.log(this.state.thumbN);
   }
 
   clickThumpdown(){
-    if(this.state.isThumb === "-1") {
+    var number = this.state.thumbN;
+    if(this.state.isThumb === -1) {
       this.state.isThumb =0;
+      number +=1;
+      document.getElementById("Thumbdownid").style.color = "black";
+    }else if(this.state.isThumb === 0){
+      this.state.isThumb = -1;
+      number -=1;
+      document.getElementById("Thumbdownid").style.color = "red";
+    }else{
+      this.state.isThumb = -1;
+      number -=2
+      document.getElementById("Thumbdownid").style.color = "red";
+      document.getElementById("Thumbupid").style.color = "black";
     }
-    this.state.isThumb = -1;
+    this.setState({thumbN:number});
     console.log(this.state.isThumb);
+    console.log(this.state.thumbN);
   }
   render() {
     return (
@@ -88,6 +124,7 @@ class Card extends Component {
               src={require('./icons/plusNoBackground.svg')}
               onClick={this.props.drawLink}
               alt="Link Dest Button"/>
+
             <img
               className="deleteButton"
               src={require('./icons/iconmonstr-x-mark.svg')}
@@ -102,11 +139,15 @@ class Card extends Component {
               alt="Link Origin Button"/>
          </div>
          <div>
+           <div>
+             
+           </div>
            <div className="CardText" onClick={this.handleOpenModal}>{this.state.textarea}</div>
            <ReactModal
               isOpen={this.state.showModal}
               contentLabel="Minimal Modal Example"
               className="Modal"
+              shouldCloseOnOverlayClick={false}
               overlayClassName="Overlay">
               <div className="top">
                 <div className="topcontainer">
@@ -142,8 +183,9 @@ class Card extends Component {
                     validate={this.validateAndUpdateDB()}
                     classLoading="loading"
                     classInvalid="invalid"/>
-                  <FaThumbsUp className="Thumbup" onClick={this.clickThumpup} />
-                  <FaThumbsDown className="Thumbdown" onClick={this.clickThumpdown}/> 
+                  <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
+                  <FaThumbsDown id= "Thumbdownid" className="Thumbdown" onClick={this.clickThumpdown}/>
+                  <div class ="voteNumber">{this.state.thumbN}</div>
                 </div>
            </ReactModal>
          </div>
