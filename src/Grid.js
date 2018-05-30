@@ -20,15 +20,19 @@ class Grid extends Component {
             meetingId: "1",
             links: [],
             name: "vhcnf",
-            votes: "hihta"
+            votes: "hihta",
+            passcodeEntered: false,
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
         this.drawLink = this.drawLink.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
     componentDidMount() {
         console.log(this.props.match.params.number);
+        this.setState({meetingId: this.props.match.params.number});
+        console.log(this.state.meetingId);
     }
 
 
@@ -87,6 +91,23 @@ class Grid extends Component {
       }
     }
 
+    submit() {
+        const dbRef = firebase.database();
+        const queryString = "/meetings/" + this.props.match.params.number;
+
+        var verdict = dbRef.ref(queryString).once('value').then(function(snapshot) {
+            var newState = false;
+            const test = snapshot.val();
+            const value = document.getElementById("password").value;
+            newState = (test.memberPasscode === value);
+            return newState;
+        });
+
+        if (verdict) {
+            this.setState({passcodeEntered: verdict});
+        }   
+    }
+
     deletefromList(sectionId, cardId) {
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
@@ -101,24 +122,30 @@ class Grid extends Component {
 
     render() {
         return (
-        <div className="Grid">
-
-            {this.sections.map((sectionTitle, i) =>
-                <GridSection
-                    key={sectionTitle}
-                    sectionTitle={sectionTitle}
-                    cards={this.state.cards[sectionTitle]}
-                    addToList= {() => this.addToList(sectionTitle)}
-                    deletefromList= {this.deletefromList}
-                    drawLink = {this.drawLink}/>
-            )};
-            <div className = "Lines">
-            {this.state.links.map((t) =>
-                <LineTo from={t[0]} to={t[1]} />
-                )};
+            this.state.passcodeEntered ? (
+                <div className="Grid">
+                    {this.sections.map((sectionTitle, i) =>
+                        <GridSection
+                            key={sectionTitle}
+                            sectionTitle={sectionTitle}
+                            cards={this.state.cards[sectionTitle]}
+                            addToList= {() => this.addToList(sectionTitle)}
+                            deletefromList= {this.deletefromList}
+                            drawLink = {this.drawLink}/>
+                    )};
+                    <div className = "Lines">
+                        {this.state.links.map((t) =>
+                            <LineTo from={t[0]} to={t[1]} />
+                        )};
+                    </div>    
+                </div>
+            ) : (
+            <div id="bkg">
+                <h1> enter meeting passcode! </h1>
+                <input type="text" id="password" placeholder="password" />
+                <div id="btn" onClick={this.submit}> <div> submit </div> </div>
             </div>
-            
-        </div>
+            )
         );
     }
 }
