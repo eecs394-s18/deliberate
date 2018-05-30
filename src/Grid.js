@@ -56,7 +56,6 @@ class Grid extends Component {
                 if(snapshot.val()){
                     Object.keys(snapshot.val()).forEach(l => {
                         if (l !== "linkschild"){
-                            console.log(l);
                             var linkId = 'links/' + l;
                             var linksIdRef = dbRef.ref(linkId);
 
