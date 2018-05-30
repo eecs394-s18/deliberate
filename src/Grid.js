@@ -98,9 +98,14 @@ class Grid extends Component {
         var verdict = dbRef.ref(queryString).once('value').then(function(snapshot) {
             var newState = false;
             const test = snapshot.val();
-            const value = document.getElementById("password").value;
-            newState = (test.memberPasscode === value);
+            const inputField = document.getElementById("password");
+            if (inputField) {
+                const value = document.getElementById("password").value;
+                newState = (test.memberPasscode === value);
+            }
+
             return newState;
+
         });
 
         if (verdict) {
