@@ -101,10 +101,34 @@ class Grid extends Component {
         dbRef.ref(queryString).once('value').then((snapshot) => {
             var newState = false;
             const test = snapshot.val();
-            const value = document.getElementById("password").value;
-            newState = (test.memberPasscode === value);
+            const value = this.getInputPassword();
+
+            document.getElementById("admin").value = "";
+            document.getElementById("member").value = "";
+
+            var memberPasscodeHit = (test.memberPasscode === value);
+            var adminPasscodeHit = (test.adminPasscode === value);
+
+            if (memberPasscodeHit) {
+                console.log("member");
+                newState = true;
+            } 
+
+            if (adminPasscodeHit) {
+                console.log("admin");
+                newState = true;
+            }
+
             this.setState({passcodeEntered: newState});
         });
+
+        
+    }
+
+    getInputPassword(){
+        const admin = document.getElementById("admin").value;
+        const member = document.getElementById("member").value;
+        return (admin.length === 0) ? member : admin;
     }
 
     deletefromList(sectionId, cardId) {
