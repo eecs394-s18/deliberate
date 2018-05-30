@@ -17,7 +17,7 @@ class Grid extends Component {
                 "Problems": [],
                 "Solutions": []
             },
-            meetingId: "1",
+            meetingId: ["1"],
             links: [],
             name: "Click to enter text", //default card name
             votes: "hihta"
@@ -80,7 +80,7 @@ class Grid extends Component {
     }
 
     UpdateCardsForDB(sectionId, newCardId){
-        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
+        var pathToMeeting = "/meetings/" + this.state.meetingId[0] + "/" + sectionId + "/" + newCardId; 
         var pathToCard = "/cards/" + newCardId;
         var schema = {"links": {"incoming": "undefined", "outgoing": "undefined"}, "name":this.state.name, "votes": this.state.votes}
         firebase.database().ref().child(pathToMeeting).set("true");
@@ -114,8 +114,7 @@ class Grid extends Component {
        this.linkTuple.push(cardId);
       if(this.linkTuple.length === 2){
           var tLinks = this.state.links;
-<<<<<<< HEAD
-<<<<<<< HEAD
+
           var linkTuple = this.linkTuple;
           var id = linkTuple[0] + linkTuple[1];
           var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
@@ -125,27 +124,6 @@ class Grid extends Component {
           // console.log(linkTuple);
           var pathToLink = "/links/" + id;
           firebase.database().ref().child(pathToLink).set(schema);
-=======
-          tLinks.push(this.linkTuple);
-
-          var pathToLink = "/links/";
-          firebase.database().ref().child(pathToLink).set("");
->>>>>>> cbb20d2... half way to store links
-=======
-          var linkTuple = this.linkTuple;
-          var id = linkTuple[0] + linkTuple[1];
-          var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
-          
-          // schema[id] = {}
-          // schema[id]["origin"] = linkTuple[0];
-          // schema[id]["dest"] = linkTuple[1];
-          // schema[id]["status"] = "positive";
-          tLinks.push(linkTuple);
-          console.log(linkTuple);
-          var pathToLink = "/links/" + id;
-          firebase.database().ref().child(pathToLink).set(schema);
->>>>>>> 1dd62c5... sync links with firebase
-
           this.setState({
               links: tLinks,
           });
@@ -155,38 +133,14 @@ class Grid extends Component {
     }
 
     deletefromList(sectionId, cardId) {
-<<<<<<< HEAD
         this.state.links.forEach(e => {
-            var pathtolink = 'links/' + e[0] + e[1];
-            if(e[0] === cardId){
-                firebase.database().ref().child(pathtolink).remove();
-            }
-            else if (e[1] === cardId){
-                firebase.database().ref().child(pathtolink).remove();
-            }
-        });
-=======
-        var Links = this.state.links;
-        Links.forEach(e => {
-            var pathtolink = 'links/' + e[0] + e[1];
-            var index = Links.indexOf(e);
-       
-            if(e[0] === cardId){
-                console.log(Links);
-                firebase.database().ref().child(pathtolink).remove();
-                Links.splice(index, 1); 
-            }
-            else if (e[1] === cardId){
-                console.log(Links);
-                firebase.database().ref().child(pathtolink).remove();
-                Links.splice(index, 1); 
-            }
-        });
-        this.setState({
-              links: Links,
-          });
-        console.log(this.state.links);
->>>>>>> d8b7fe3... delete links when card removed
+                var pathtolink = 'links/' + e[0] + e[1];
+                if(e[0] === cardId){
+                    firebase.database().ref().child(pathtolink).remove();
+                } else if (e[1] === cardId){
+                    firebase.database().ref().child(pathtolink).remove();
+                }
+            });
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
@@ -196,9 +150,11 @@ class Grid extends Component {
         if(index !== -1) tCards[sectionId].splice(index, 1);
         this.setState({ cards : tCards})
         return
+
     }
 
     render() {
+        console.log(this.state.links);
         return (
         <div className="Grid">
 
