@@ -11,7 +11,6 @@ class Meeting extends Component {
           adminPasscode: "",
           memberPasscode: "",
           link: "",
-          value: '',
           copied: false,
         };
         this.createMeetingForm = this.createMeetingForm.bind(this);
@@ -91,7 +90,7 @@ class Meeting extends Component {
                     <button>Copy Link</button>
                   </CopyToClipboard>
               }
-              
+
               {this.state.copied ? <span style={{color: 'red'}}>Copied.</span> : null}
           </div>
 
