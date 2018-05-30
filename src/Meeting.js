@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './Meeting.css';
 import firebase from './firebase/FirebaseConfig';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 class Meeting extends Component {
     constructor(props) {
@@ -9,6 +10,8 @@ class Meeting extends Component {
           meetingName: "",
           adminPasscode: "",
           memberPasscode: "",
+          link: "",
+          copied: false,
         };
         this.createMeetingForm = this.createMeetingForm.bind(this);
         this.handleMeetingNameChange = this.handleMeetingNameChange.bind(this);
@@ -32,10 +35,10 @@ class Meeting extends Component {
         numMeetingsRef.set(newMeetingNum);
 
         var hostname = window.location.href.split("/")[2];
-        var link = hostname + "/meeting/" + newMeetingNum;
-        console.log(link);
+        var tLink = hostname + "/meeting/" + newMeetingNum;
+        console.log(tLink);
 
-        // DISPLAY LINK HERE
+        this.setState({link: tLink});
       });
       e.preventDefault();
     }
@@ -52,6 +55,13 @@ class Meeting extends Component {
       this.setState({memberPasscode: e.target.value})
     }
 
+    copyLink(){
+        var copyText = document.getElementById("copyLink");
+        console.log(copyText);
+        copyText.select();
+        document.execCommand("copy");
+        alert("Copied the link: " + copyText.value);
+    }
 
     render() {
         return (
@@ -69,6 +79,20 @@ class Meeting extends Component {
 
             <input type="submit"/>
           </form>
+          <br/>
+          <div>
+
+              {this.state.link}<br/>
+              {this.state.link === "" ? null :
+                  <CopyToClipboard text={this.state.link}
+                    onCopy={() => this.setState({copied: true})}>
+                    <button>Copy Link</button>
+                  </CopyToClipboard>
+              }
+
+              {this.state.copied ? <span style={{color: 'red'}}>Copied.</span> : null}
+          </div>
+
 
 
           </div>
