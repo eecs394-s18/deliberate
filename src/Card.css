@@ -13,11 +13,13 @@
 }
 
 .CardText {
+    
     text-align: center;
     margin-right: 20px;
 }
 
 .deleteButton {
+    font-family: Georgia;
     margin-right: -10px;
     float: right;
 }
@@ -63,6 +65,7 @@
     position: absolute;
 }
 .cardTitle {
+    font-family: Georgia;
     position: absolute;
     top:22px;
     left:65px; 
@@ -72,6 +75,7 @@
     display: inline-block;
 }
 .cardDetail{
+    font-family: Georgia;
     position: absolute;
     top:168px;
     left:15px; 
@@ -90,7 +94,7 @@
     left: 150px;
     right: 150px;
     bottom: 350px;
-    background-color: #ffffff;
+    background-color: #fefdff;
     z-index: 3;
 }
 
