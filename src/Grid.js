@@ -65,6 +65,7 @@ class Grid extends Component {
         this.setState({meetingId: this.props.match.params.number});
         const dbRef = firebase.database();
         this.listenToCardsForMeetingFromDB(dbRef, this.props.match.params.number);
+        console.log("passcode entered", this.state.passcodeEntered)
     }
 
     addToList(sectionId) {
@@ -101,13 +102,14 @@ class Grid extends Component {
         dbRef.ref(queryString).once('value').then((snapshot) => {
             var newState = false;
             const test = snapshot.val();
-            const value = this.getInputPassword();
+            const memberPasscode = this.getMemberInputPassword();
+            const adminPasscode = this.getAdminInputPassword();
 
             document.getElementById("admin").value = "";
             document.getElementById("member").value = "";
 
-            var memberPasscodeHit = (test.memberPasscode === value);
-            var adminPasscodeHit = (test.adminPasscode === value);
+            var memberPasscodeHit = (test.memberPasscode === memberPasscode);
+            var adminPasscodeHit = (test.adminPasscode === adminPasscode);
 
             if (memberPasscodeHit) {
                 console.log("member");
@@ -120,15 +122,23 @@ class Grid extends Component {
             }
 
             this.setState({passcodeEntered: newState});
+
+            if (newState === false) {
+                alert('incorrect passcode!')
+            }
         });
 
         
     }
 
-    getInputPassword(){
-        const admin = document.getElementById("admin").value;
+    getMemberInputPassword(){
         const member = document.getElementById("member").value;
-        return (admin.length === 0) ? member : admin;
+        return member;
+    }
+
+    getAdminInputPassword() {
+        const admin = document.getElementById("admin").value;
+        return admin;
     }
 
     deletefromList(sectionId, cardId) {
