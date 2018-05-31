@@ -3,3 +3,21 @@
     height: 100vh;
     z-index: -10;
 }
+
+#btn {
+	height: 50px;
+	width: 100px;
+	text-align: center;
+	display: table;
+	border-radius: 3px;
+	background: #444;
+	margin-top: 50px;
+}
+
+#btn div {
+	display: table-cell;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+    color: white;
+}

@@ -66,8 +66,6 @@ class Meeting extends Component {
     render() {
         return (
         <div className="bkg">
-
-
           <form onSubmit={this.createMeetingForm}>
             Meeting Name:
             <input type="text" name="meetingName" value = {this.state.meetingName} onChange = {this.handleMeetingNameChange} /><br/><br/>

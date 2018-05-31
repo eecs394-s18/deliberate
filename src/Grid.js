@@ -20,11 +20,13 @@ class Grid extends Component {
             meetingId: "1",
             links: [],
             name: "Click to enter text", //default card name
-            votes: "hihta"
+            votes: "hihta",
+            passcodeEntered: false
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
         this.drawLink = this.drawLink.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
     listenToCardsForMeetingFromDB(dbRef, meetingId) {
@@ -63,6 +65,7 @@ class Grid extends Component {
         this.setState({meetingId: this.props.match.params.number});
         const dbRef = firebase.database();
         this.listenToCardsForMeetingFromDB(dbRef, this.props.match.params.number);
+        console.log("passcode entered", this.state.passcodeEntered)
     }
 
     addToList(sectionId) {
@@ -92,6 +95,52 @@ class Grid extends Component {
       }
     }
 
+    submit(e) {
+        const dbRef = firebase.database();
+        const queryString = "/meetings/" + this.props.match.params.number;
+
+        dbRef.ref(queryString).once('value').then((snapshot) => {
+            var newState = false;
+            const test = snapshot.val();
+            const memberPasscode = this.getMemberInputPassword();
+            const adminPasscode = this.getAdminInputPassword();
+
+            document.getElementById("admin").value = "";
+            document.getElementById("member").value = "";
+
+            var memberPasscodeHit = (test.memberPasscode === memberPasscode);
+            var adminPasscodeHit = (test.adminPasscode === adminPasscode);
+
+            if (memberPasscodeHit) {
+                console.log("member");
+                newState = true;
+            } 
+
+            if (adminPasscodeHit) {
+                console.log("admin");
+                newState = true;
+            }
+
+            this.setState({passcodeEntered: newState});
+
+            if (newState === false) {
+                alert('incorrect passcode!')
+            }
+        });
+
+        
+    }
+
+    getMemberInputPassword(){
+        const member = document.getElementById("member").value;
+        return member;
+    }
+
+    getAdminInputPassword() {
+        const admin = document.getElementById("admin").value;
+        return admin;
+    }
+
     deletefromList(sectionId, cardId) {
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
@@ -106,24 +155,31 @@ class Grid extends Component {
 
     render() {
         return (
-        <div className="Grid">
-
-            {this.sections.map((sectionTitle, i) =>
-                <GridSection
-                    key={sectionTitle}
-                    sectionTitle={sectionTitle}
-                    cards={this.state.cards[sectionTitle]}
-                    addToList= {() => this.addToList(sectionTitle)}
-                    deletefromList= {this.deletefromList}
-                    drawLink = {this.drawLink}/>
-            )};
-            <div className = "Lines">
-            {this.state.links.map((t) =>
-                <LineTo from={t[0]} to={t[1]} />
-                )};
+            this.state.passcodeEntered ? (
+                <div className="Grid">
+                    {this.sections.map((sectionTitle, i) =>
+                        <GridSection
+                            key={sectionTitle}
+                            sectionTitle={sectionTitle}
+                            cards={this.state.cards[sectionTitle]}
+                            addToList= {() => this.addToList(sectionTitle)}
+                            deletefromList= {this.deletefromList}
+                            drawLink = {this.drawLink}/>
+                    )};
+                    <div className = "Lines">
+                        {this.state.links.map((t) =>
+                            <LineTo from={t[0]} to={t[1]} />
+                        )};
+                    </div>    
+                </div>
+            ) : (
+            <div id="bkg">
+                <h1> enter meeting passcode! </h1>
+                <input type="text" id="admin" placeholder="Admin Password" />
+                <input type="text" id="member" placeholder="Member Password" />
+                <div id="btn" onClick={this.submit}> <div> submit </div> </div>
             </div>
-            
-        </div>
+            )
         );
     }
 }
