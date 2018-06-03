@@ -14,6 +14,7 @@ class GridSection extends Component {
                     <Card
                         cardId={cardId}
                         key={cardId}
+                        timer = {this.props.timer}
                         deletefromList={() =>
                             this.props.deletefromList(this.props.sectionTitle, cardId)}
                         drawLink={() =>

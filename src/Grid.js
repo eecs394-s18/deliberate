@@ -21,7 +21,8 @@ class Grid extends Component {
             links: [],
             name: "Click to enter text", //default card name
             votes: "hihta",
-            passcodeEntered: false
+            passcodeEntered: false,
+            Timer: null
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
@@ -97,7 +98,7 @@ class Grid extends Component {
     }
 
     componentDidMount() {
-        let timeinterval = window.setInterval(function() {
+        this.state.Timer = window.setInterval(function() {
             this.setstate()
         }.bind(this), 100);
     }
@@ -223,7 +224,8 @@ class Grid extends Component {
                             cards={this.state.cards[sectionTitle]}
                             addToList= {() => this.addToList(sectionTitle)}
                             deletefromList= {this.deletefromList}
-                            drawLink = {this.drawLink}/>
+                            drawLink = {this.drawLink}
+                            timer = {this.state.Timer}/>
                     )}; 
                     {this.state.links.map((t) =>
                         <LineTo from={t[0]} to={t[1]} />

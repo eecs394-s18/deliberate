@@ -17,6 +17,7 @@ class Card extends Component {
     this.handleCloseModal = this.handleCloseModal.bind(this);
   }
   handleOpenModal() {
+    this.clearTimer();
     this.setState({showModal: true});
   }
 
@@ -42,6 +43,7 @@ class Card extends Component {
 
   virtualServerCallback = (newState) => {
     this.changeState(newState);
+    this.clearTimer();
   };
 
   changeState = (newState) => {
@@ -57,6 +59,10 @@ class Card extends Component {
 
   validateAndUpdateDB(){
       this.isStringAcceptable(this.state.textarea);
+  }
+
+  clearTimer(){
+    window.clearInterval(this.props.timer);
   }
 
   render() {
