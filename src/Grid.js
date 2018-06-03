@@ -21,7 +21,8 @@ class Grid extends Component {
             links: [],
             name: "Click to enter text", //default card name
             votes: "hihta",
-            passcodeEntered: false
+            passcodeEntered: false,
+            Timer: null
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
@@ -47,7 +48,35 @@ class Grid extends Component {
                     tCards[sectionName] = cardIds;
                 }
                 this.setState({ cards : tCards})
+                let linkPath = 'links/';
+                let linksRef = dbRef.ref(linkPath);
+
+                linksRef.on('value', (snapshot) => {
+                    var tlinks = [];
+                    var origin, dest;
+                    var linkTuple;
+                    if(snapshot.val()){
+                        Object.keys(snapshot.val()).forEach(l => {
+                            if (l !== "linkschild"){
+                                var linkId = 'links/' + l;
+                                var linksIdRef = dbRef.ref(linkId);
+
+                                linksIdRef.on('value', (snapshot) => {
+                                    var schema = snapshot.val();
+                                    if (schema != null) {
+                                        origin = schema["origin"];
+                                        dest = schema["dest"];
+                                    }
+                                    });
+                                linkTuple = [origin, dest];
+                                tlinks.push(linkTuple);
+                            }
+                            
+                        });
+                    }
+                this.setState({links:tlinks});
             });
+        });
         });
     }
 
@@ -68,6 +97,18 @@ class Grid extends Component {
         console.log("passcode entered", this.state.passcodeEntered)
     }
 
+    componentDidMount() {
+        this.state.Timer = window.setInterval(function() {
+            this.setstate()
+        }.bind(this), 100);
+    }
+
+    setstate(){
+        var tlink = this.state.links;
+        this.setState({links: tlink});
+    }
+
+
     addToList(sectionId) {
         var tCards = this.state.cards;
         var max = 0;
@@ -85,14 +126,24 @@ class Grid extends Component {
 
     drawLink(cardId) {
       this.linkTuple.push(cardId);
-      if(this.linkTuple.length === 2){
-          var tLinks = this.state.links;
-          tLinks.push(this.linkTuple);
-          this.setState({
-              links: tLinks,
-          });
-          this.linkTuple =[];
-      }
+        if(this.linkTuple.length === 2){
+            if (this.linkTuple[0] === this.linkTuple[1]){
+                this.linkTuple =[];
+                return
+            }
+            var tLinks = this.state.links;
+            var linkTuple = this.linkTuple;
+            var id = linkTuple[0] + linkTuple[1];
+            var schema = {"origin":linkTuple[0], "dest": linkTuple[1], "status": "positive"};
+            tLinks.push(linkTuple);
+            var pathToLink = "/links/" + id;
+            firebase.database().ref().child(pathToLink).set(schema);
+            this.setState({
+                links: tLinks,
+            });
+            this.linkTuple =[];
+         }
+        return
     }
 
     submit(e) {
@@ -126,6 +177,7 @@ class Grid extends Component {
             if (newState === false) {
                 alert('incorrect passcode!')
             }
+            console.log("passcode entered", this.state.passcodeEntered)
         });
 
         
@@ -142,6 +194,14 @@ class Grid extends Component {
     }
 
     deletefromList(sectionId, cardId) {
+        this.state.links.forEach(e => {
+                var pathtolink = 'links/' + e[0] + e[1];
+                if(e[0] === cardId){
+                    firebase.database().ref().child(pathtolink).remove();
+                } else if (e[1] === cardId){
+                    firebase.database().ref().child(pathtolink).remove();
+                }
+            });
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
@@ -149,7 +209,7 @@ class Grid extends Component {
         let tCards = this.state.cards;
         let index = tCards[sectionId].indexOf(cardId);
         if(index !== -1) tCards[sectionId].splice(index, 1);
-        this.setState({ cards : tCards})
+        this.setState({ cards : tCards});
         return
     }
 
@@ -164,13 +224,12 @@ class Grid extends Component {
                             cards={this.state.cards[sectionTitle]}
                             addToList= {() => this.addToList(sectionTitle)}
                             deletefromList= {this.deletefromList}
-                            drawLink = {this.drawLink}/>
-                    )};
-                    <div className = "Lines">
-                        {this.state.links.map((t) =>
-                            <LineTo from={t[0]} to={t[1]} />
-                        )};
-                    </div>    
+                            drawLink = {this.drawLink}
+                            timer = {this.state.Timer}/>
+                    )}; 
+                    {this.state.links.map((t) =>
+                        <LineTo from={t[0]} to={t[1]} />
+                    )}  
                 </div>
             ) : (
             <div id="bkg">
