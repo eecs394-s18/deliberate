@@ -91,6 +91,14 @@ class Grid extends Component {
         this.setState({meetingId: this.props.match.params.number});
         const dbRef = firebase.database();
         this.listenToCardsForMeetingFromDB(dbRef, this.props.match.params.number);
+        console.log("mount");
+    }
+
+    componentDidMount(){
+        const dbRef = firebase.database();
+        this.listenToCardsForMeetingFromDB(dbRef, this.props.match.params.number);
+        console.log("mount");
+        this.setState({meetingId: this.props.match.params.number});
     }
 
     addToList(sectionId) {
@@ -146,32 +154,30 @@ class Grid extends Component {
         let tCards = this.state.cards;
         let index = tCards[sectionId].indexOf(cardId);
         if(index !== -1) tCards[sectionId].splice(index, 1);
-        this.setState({ cards : tCards})
+        this.setState({ cards : tCards});
         return
-
     }
 
     render() {
         return (
         <div className="Grid">
-
             {this.sections.map((sectionTitle, i) =>
-                <GridSection
+                     <GridSection
                     key={sectionTitle}
                     sectionTitle={sectionTitle}
                     cards={this.state.cards[sectionTitle]}
                     addToList= {() => this.addToList(sectionTitle)}
                     deletefromList= {this.deletefromList}
                     drawLink = {this.drawLink}/>
-            )};
+            )}
             <div className = "Lines">
             {this.state.links.map((t) =>
-                <LineTo from={t[0]} to={t[1]} />
-                )};
+                <LineTo from={t[0]} to={t[1]}/>
+                )
+            }
             </div>
-            
         </div>
-        );
+        )
     }
 }
 
