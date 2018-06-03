@@ -17,16 +17,14 @@ class GridSection extends Component {
                         deletefromList={() =>
                             this.props.deletefromList(this.props.sectionTitle, cardId)}
                         drawLink={() =>
-                            this.props.drawLink(cardId)}
-                    />
+                            this.props.drawLink(cardId)}/>
                 )}
             </div>
             <img
                 className="plusButton"
                 src={require('./icons/plusButton.svg')}
                 onClick={this.props.addToList}
-                alt="Plus button"
-            />
+                alt="Plus button"/>
         </div>
         );
     }
