@@ -96,18 +96,6 @@ class Grid extends Component {
         console.log("passcode entered", this.state.passcodeEntered)
     }
 
-    componentDidMount() {
-        let timeinterval = window.setInterval(function() {
-            this.setstate()
-        }.bind(this), 100);
-    }
-
-    setstate(){
-        var tlink = this.state.links;
-        this.setState({links: tlink});
-    }
-
-
     addToList(sectionId) {
         var tCards = this.state.cards;
         var max = 0;
@@ -172,6 +160,8 @@ class Grid extends Component {
             }
 
             this.setState({passcodeEntered: newState});
+            var tlink = this.state.links;
+            this.setState({links: tlink});
 
             if (newState === false) {
                 alert('incorrect passcode!')
@@ -194,13 +184,13 @@ class Grid extends Component {
 
     deletefromList(sectionId, cardId) {
         this.state.links.forEach(e => {
-                var pathtolink = 'links/' + e[0] + e[1];
-                if(e[0] === cardId){
-                    firebase.database().ref().child(pathtolink).remove();
-                } else if (e[1] === cardId){
-                    firebase.database().ref().child(pathtolink).remove();
-                }
-            });
+            var pathtolink = 'links/' + e[0] + e[1];
+            if(e[0] === cardId){
+                firebase.database().ref().child(pathtolink).remove();
+            } else if (e[1] === cardId){
+                firebase.database().ref().child(pathtolink).remove();
+            }
+        });
         var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
@@ -226,7 +216,7 @@ class Grid extends Component {
                             drawLink = {this.drawLink}/>
                     )}; 
                     {this.state.links.map((t) =>
-                        <LineTo from={t[0]} to={t[1]} />
+                        <LineTo key={t[0]+t[1]} from={t[0]} to={t[1]} />
                     )}  
                 </div>
             ) : (
