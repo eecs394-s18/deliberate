@@ -42,13 +42,29 @@ class Card extends Component {
     thisCardNameRef.on('value', (snapshot) => {
       this.setState({textarea: snapshot.val()})
     });
+    var cardDetailPath = "/cards/" + this.props.cardId + "/detail/";
+    let thisCardDetailRef = firebase.database().ref(cardDetailPath);
+    thisCardDetailRef.on('value', (snapshot) => {
+      this.setState({detailarea: snapshot.val()})
+    });
   }
 
-  virtualServerCallback = (newState) => {
-    this.changeState(newState);
+  virtualServerCallbackName = (newState) => {
+    this.changeStateName(newState);
   };
 
-  changeState = (newState) => {
+  virtualServerCallbackDetail = (newState) => {
+    this.changeStateDetail(newState);
+  };
+
+  changeStateDetail = (newState) => {
+    this.setState(newState);
+    var cardNamePath = "/cards/" + this.props.cardId + "/detail/";
+    firebase.database().ref().child(cardNamePath).set(newState.detailarea);
+    return
+  };
+
+  changeStateName = (newState) => {
     this.setState(newState);
     var cardNamePath = "/cards/" + this.props.cardId + "/name/";
     firebase.database().ref().child(cardNamePath).set(newState.textarea);
@@ -66,7 +82,7 @@ class Card extends Component {
     return (string.length >= 1);  // Minimum 4 letters long
   };
 
-  validateAndUpdateDB(){
+  validate(){
       this.isStringAcceptable(this.state.textarea);
   }
 
@@ -164,9 +180,9 @@ class Card extends Component {
                   <RIETextArea
                     className="cardTitle"
                     value={this.state.textarea}
-                    change={this.virtualServerCallback}
+                    change={this.virtualServerCallbackName}
                     propName="textarea"
-                    validate={this.validateAndUpdateDB()}
+                    validate={this.validate()}
                     classLoading="loading"
                     classInvalid="invalid"/>
                   </div>
@@ -178,9 +194,9 @@ class Card extends Component {
                   <RIETextArea
                     className="cardDetail"
                     value={this.state.detailarea}
-                    change={this.virtualServerCallback}
-                    propName="textarea"
-                    validate={this.validateAndUpdateDB()}
+                    change={this.virtualServerCallbackDetail}
+                    propName="detailarea"
+                    validate={this.validate()}
                     classLoading="loading"
                     classInvalid="invalid"/>
                   <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
