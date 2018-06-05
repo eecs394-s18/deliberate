@@ -45,7 +45,11 @@ class Card extends Component {
     var cardDetailPath = "/cards/" + this.props.cardId + "/detail/";
     let thisCardDetailRef = firebase.database().ref(cardDetailPath);
     thisCardDetailRef.on('value', (snapshot) => {
-      this.setState({detailarea: snapshot.val()})
+      if (snapshot.val()) {
+        this.setState({detailarea: snapshot.val()});
+      } else {
+        console.log(snapshot.val(), ' is null');
+      }
     });
   }
 
@@ -201,7 +205,7 @@ class Card extends Component {
                     classInvalid="invalid"/>
                   <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
                   <FaThumbsDown id= "Thumbdownid" className="Thumbdown" onClick={this.clickThumpdown}/>
-                  <div class ="voteNumber">{this.state.thumbN}</div>
+                  <div className="voteNumber">{this.state.thumbN}</div>
                 </div>
            </ReactModal>
          </div>
