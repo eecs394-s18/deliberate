@@ -15,6 +15,8 @@ class Card extends Component {
       isThumb: 0,
       thumbN: 0,
     };
+    this.name = 'mockName';
+
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.clickThumpup = this.clickThumpup.bind(this);
@@ -90,6 +92,39 @@ class Card extends Component {
       this.isStringAcceptable(this.state.textarea);
   }
 
+  deleteVote(voterName, voteType) {
+    if (voteType == 'up') {
+      // remove the positive vote
+      let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.name;
+      firebase.database().ref().child(votePath).remove();
+    } else if (voteType == 'down') {
+      // remove the negative vote
+      let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.name;
+      firebase.database().ref().child(votePath).remove();
+    } else {
+      console.error('invalid vote type');
+    }
+  }
+
+  addVote(voteType) {
+    if (voteType==='up') {
+      // remove negative vote
+      this.deleteVote(this.name, 'down');
+      // add positive vote
+      let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.name;
+      firebase.database().ref().child(votePath).set(true);
+    }
+    else if (voteType==='down') {
+      // remove positive vote
+      this.deleteVote(this.name, 'up');
+      // add negative vote
+      let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.name;
+      firebase.database().ref().child(votePath).set(true);
+    } else {
+      console.error('invalid vote type');
+    }
+  }
+
   clickThumpup(){
     // use setState doesn't work. So change state directly
     var number = this.state.thumbN;
@@ -97,15 +132,18 @@ class Card extends Component {
       this.setState({isThumb: 0});
       number -=1;
       document.getElementById("Thumbupid").style.color = "black";
+      this.deleteVote(this.name, 'up');
     }else if(this.state.isThumb === 0){
       this.setState({isThumb: 1});
       number +=1;
       document.getElementById("Thumbupid").style.color = "green";
+      this.addVote('up')
     }else{
       this.setState({isThumb: 1});
       number+=2
       document.getElementById("Thumbupid").style.color = "green";
       document.getElementById("Thumbdownid").style.color = "black";
+      this.addVote('up')
     }
     // this.thumbRender();
     this.setState({thumbN:number});
@@ -120,15 +158,18 @@ class Card extends Component {
       this.setState({isThumb: 0});
       number +=1;
       document.getElementById("Thumbdownid").style.color = "black";
+      this.deleteVote(this.name, 'down');
     }else if(this.state.isThumb === 0){
       this.setState({isThumb: -1});
       number -=1;
       document.getElementById("Thumbdownid").style.color = "red";
+      this.addVote('down')
     }else{
       this.setState({isThumb: -1});
       number -=2
       document.getElementById("Thumbdownid").style.color = "red";
       document.getElementById("Thumbupid").style.color = "black";
+      this.addVote('down')
     }
     this.setState({thumbN:number});
     console.log(this.state.isThumb);
