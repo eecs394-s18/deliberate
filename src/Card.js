@@ -18,14 +18,37 @@ class Card extends Component {
       negVotings: [],
     };
     this.name = 'mockName';
-
+    this.positiveVotes = {
+      'yao' : true,
+      'Avi' : true,
+    }
+    this.negativeVotes = {
+      'Xiao' : true,
+      'Sarah': true,
+    } 
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.clickThumpup = this.clickThumpup.bind(this);
     this.clickThumpdown = this.clickThumpdown.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
   }
   handleOpenModal() {
     this.setState({showModal: true});
+    // fetch votedata from database.
+  }
+  afterOpenModal(){
+    this.checkNameAndUpdate("yao");
+  }
+  checkNameAndUpdate(voterName){
+    if(voterName in this.positiveVotes){
+      this.setState({isThumb:1});
+      document.getElementById("Thumbupid").style.color = "green";
+    }else if(voterName in this.negativeVotes){
+      this.setState({isThumb:-1});
+      document.getElementById("Thumbdownid").style.color = "red";
+    }else{
+      this.setState({isThumb:0});
+    }
   }
 
   handleCloseModal() {
@@ -243,6 +266,7 @@ class Card extends Component {
            <div className="CardText" onClick={this.handleOpenModal}>{this.state.textarea}</div>
            <ReactModal
               isOpen={this.state.showModal}
+              onAfterOpen = {this.afterOpenModal}
               contentLabel="Minimal Modal Example"
               className="Modal"
               shouldCloseOnOverlayClick={false}
