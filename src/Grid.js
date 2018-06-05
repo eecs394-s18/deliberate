@@ -70,7 +70,7 @@ class Grid extends Component {
                                 linkTuple = [origin, dest];
                                 tlinks.push(linkTuple);
                             }
-                            
+
                         });
                     }
                 this.setState({links:tlinks});
@@ -80,7 +80,7 @@ class Grid extends Component {
     }
 
     UpdateCardsForDB(sectionId, newCardId){
-        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId; 
+        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + newCardId;
         var pathToCard = "/cards/" + newCardId;
         var schema = {"links": {"incoming": "undefined", "outgoing": "undefined"}, "name":this.state.name, "votes": this.state.votes}
         firebase.database().ref().child(pathToMeeting).set("true");
@@ -142,17 +142,20 @@ class Grid extends Component {
             const test = snapshot.val();
             const memberPasscode = this.getMemberInputPassword();
             const adminPasscode = this.getAdminInputPassword();
+            const memberName = this.getMemberName();
 
             document.getElementById("admin").value = "";
             document.getElementById("member").value = "";
+            document.getElementById("memberName").value = "";
 
             var memberPasscodeHit = (test.memberPasscode === memberPasscode);
             var adminPasscodeHit = (test.adminPasscode === adminPasscode);
 
             if (memberPasscodeHit) {
                 console.log("member");
+                console.log(memberName);
                 newState = true;
-            } 
+            }
 
             if (adminPasscodeHit) {
                 console.log("admin");
@@ -169,12 +172,17 @@ class Grid extends Component {
             console.log("passcode entered", this.state.passcodeEntered)
         });
 
-        
+
     }
 
     getMemberInputPassword(){
         const member = document.getElementById("member").value;
         return member;
+    }
+
+    getMemberName(){
+        const memberName = document.getElementById("memberName").value;
+        return memberName;
     }
 
     getAdminInputPassword() {
@@ -191,7 +199,7 @@ class Grid extends Component {
                 firebase.database().ref().child(pathtolink).remove();
             }
         });
-        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId; 
+        var pathToMeeting = "/meetings/" + this.state.meetingId + "/" + sectionId + "/" + cardId;
         var pathToCard = "/cards/" + cardId;
         firebase.database().ref().child(pathToMeeting).remove();
         firebase.database().ref().child(pathToCard).remove();
@@ -214,16 +222,17 @@ class Grid extends Component {
                             addToList= {() => this.addToList(sectionTitle)}
                             deletefromList= {this.deletefromList}
                             drawLink = {this.drawLink}/>
-                    )}; 
+                    )};
                     {this.state.links.map((t) =>
                         <LineTo key={t[0]+t[1]} from={t[0]} to={t[1]} />
-                    )}  
+                    )}
                 </div>
             ) : (
             <div id="bkg">
                 <h1> enter meeting passcode! </h1>
                 <input type="text" id="admin" placeholder="Admin Password" />
                 <input type="text" id="member" placeholder="Member Password" />
+                <input type="text" id="memberName" placeholder="Member Name" />
                 <div id="btn" onClick={this.submit}> <div> submit </div> </div>
             </div>
             )
