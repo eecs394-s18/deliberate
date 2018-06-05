@@ -13,19 +13,13 @@ class Card extends Component {
       showModal: false,
       detailarea : `Put some detail information`,
       isThumb: 0,
-      thumbN: 0,
-      posVotings: [],
-      negVotings: [],
+      myVote: 0,
+      posVotings: {},
+      negVotings: {},
+      nPosVotes: 0,
+      nNegVotes: 0
     };
     this.name = 'mockName';
-    this.positiveVotes = {
-      'yao' : true,
-      'Avi' : true,
-    }
-    this.negativeVotes = {
-      'Xiao' : true,
-      'Sarah': true,
-    } 
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.clickThumpup = this.clickThumpup.bind(this);
@@ -37,16 +31,16 @@ class Card extends Component {
     // fetch votedata from database.
   }
   afterOpenModal(){
-    this.checkNameAndUpdate("yao");
+    this.checkNameAndUpdate(this.name);
   }
   checkNameAndUpdate(voterName){
-    if(voterName in this.positiveVotes){
+    if(voterName in this.state.posVotings){
       this.setState({isThumb:1});
       document.getElementById("Thumbupid").style.color = "green";
-    }else if(voterName in this.negativeVotes){
+    } else if(voterName in this.state.negVotings){
       this.setState({isThumb:-1});
       document.getElementById("Thumbdownid").style.color = "red";
-    }else{
+    } else{
       this.setState({isThumb:0});
     }
   }
@@ -75,8 +69,6 @@ class Card extends Component {
     thisCardDetailRef.on('value', (snapshot) => {
       if (snapshot.val()) {
         this.setState({detailarea: snapshot.val()});
-      } else {
-        console.log(snapshot.val(), ' is null');
       }
     });
   }
@@ -86,32 +78,26 @@ class Card extends Component {
         console.error("default card shouldn't be displayed")
       }
       var negPath = "/cards/" + this.props.cardId + "/negativeVotes/";
-      var posPath = "/cards/" + this.props.cardId + "/postiveVotes/";
+      var posPath = "/cards/" + this.props.cardId + "/positiveVotes/";
 
-      let tPosVotings = this.state.posVotings;
       let thisCardPosRef = firebase.database().ref(posPath);
       thisCardPosRef.on('value', (snapshot) => {
-          let children = snapshot.val();
-          if(children){
-              let posNum = Object.keys(children).length;
-              // console.log(this.props.cardId, "positive votings: ", posNum, children);
-              Object.keys(children).forEach(x => {tPosVotings.push(x)});
-          };
-          console.log(tPosVotings);
-          this.setState({posVotings: tPosVotings});
+          if (snapshot.val()) {
+            this.setState({posVotings: snapshot.val()});
+            this.setState({nPosVotes: Object.keys(snapshot.val()).length});
+          } else {
+            this.setState({nPosVotes: 0});
+          }
       });
 
-      let tNegVotings = this.state.negVotings;
       let thisCardNegRef = firebase.database().ref(negPath);
       thisCardNegRef.on('value', (snapshot) => {
-          let children = snapshot.val();
-          if(children){
-              let negNum = Object.keys(children).length;
-              // console.log(this.props.cardId, "negitive votings: ", negNum, children);
-              Object.keys(children).forEach(x => {tNegVotings.push(x)});
-          };
-          console.log(tNegVotings);
-          this.setState({negVotings: tNegVotings});
+          if (snapshot.val()) {
+            this.setState({negVotings: snapshot.val()});
+            this.setState({nNegVotes: Object.keys(snapshot.val()).length});
+          } else {
+            this.setState({nNegVotes: 0});
+          }
       });
   }
 
@@ -153,11 +139,11 @@ class Card extends Component {
   }
 
   deleteVote(voterName, voteType) {
-    if (voteType == 'up') {
+    if (voteType === 'up') {
       // remove the positive vote
       let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.name;
       firebase.database().ref().child(votePath).remove();
-    } else if (voteType == 'down') {
+    } else if (voteType === 'down') {
       // remove the negative vote
       let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.name;
       firebase.database().ref().child(votePath).remove();
@@ -187,7 +173,7 @@ class Card extends Component {
 
   clickThumpup(){
     // use setState doesn't work. So change state directly
-    var number = this.state.thumbN;
+    var number = this.state.myVote;
     if(this.state.isThumb === 1) {
       this.setState({isThumb: 0});
       number -=1;
@@ -205,15 +191,11 @@ class Card extends Component {
       document.getElementById("Thumbdownid").style.color = "black";
       this.addVote('up')
     }
-    // this.thumbRender();
-    this.setState({thumbN:number});
-
-    console.log(this.state.isThumb);
-    console.log(this.state.thumbN);
+    this.setState({myVote:number});
   }
 
   clickThumpdown(){
-    var number = this.state.thumbN;
+    var number = this.state.myVote;
     if(this.state.isThumb === -1) {
       this.setState({isThumb: 0});
       number +=1;
@@ -231,10 +213,9 @@ class Card extends Component {
       document.getElementById("Thumbupid").style.color = "black";
       this.addVote('down')
     }
-    this.setState({thumbN:number});
-    console.log(this.state.isThumb);
-    console.log(this.state.thumbN);
+    this.setState({myVote:number});
   }
+
   render() {
     return (
     <div className="Card" >
@@ -307,6 +288,7 @@ class Card extends Component {
                     classInvalid="invalid"/>
                   <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
                   <FaThumbsDown id= "Thumbdownid" className="Thumbdown" onClick={this.clickThumpdown}/>
+                  <div className="voteNumber">{this.state.nPosVotes - this.state.nNegVotes}</div>
                 </div>
            </ReactModal>
          </div>
