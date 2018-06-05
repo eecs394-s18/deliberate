@@ -14,6 +14,8 @@ class Card extends Component {
       detailarea : `Put some detail information`,
       isThumb: 0,
       thumbN: 0,
+      posVotings: [],
+      negVotings: [],
     };
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -30,6 +32,7 @@ class Card extends Component {
 
   componentWillMount() {
     this.getCardNameFromDB();
+    this.getVotingFromDb();
     ReactModal.setAppElement('body');
   }
 
@@ -51,6 +54,40 @@ class Card extends Component {
         console.log(snapshot.val(), ' is null');
       }
     });
+  }
+
+  getVotingFromDb() {
+      if (this.props.cardId === 'default') { // default is a placeholder card that shouldn't be displayed
+        console.error("default card shouldn't be displayed")
+      }
+      var negPath = "/cards/" + this.props.cardId + "/negativeVotes/";
+      var posPath = "/cards/" + this.props.cardId + "/postiveVotes/";
+
+      let tPosVotings = this.state.posVotings;
+      let thisCardPosRef = firebase.database().ref(posPath);
+      thisCardPosRef.on('value', (snapshot) => {
+          let children = snapshot.val();
+          if(children){
+              let posNum = Object.keys(children).length;
+              // console.log(this.props.cardId, "positive votings: ", posNum, children);
+              Object.keys(children).forEach(x => {tPosVotings.push(x)});
+          };
+          console.log(tPosVotings);
+          this.setState({posVotings: tPosVotings});
+      });
+
+      let tNegVotings = this.state.negVotings;
+      let thisCardNegRef = firebase.database().ref(negPath);
+      thisCardNegRef.on('value', (snapshot) => {
+          let children = snapshot.val();
+          if(children){
+              let negNum = Object.keys(children).length;
+              // console.log(this.props.cardId, "negitive votings: ", negNum, children);
+              Object.keys(children).forEach(x => {tNegVotings.push(x)});
+          };
+          console.log(tNegVotings);
+          this.setState({negVotings: tNegVotings});
+      });
   }
 
   virtualServerCallbackName = (newState) => {
@@ -109,7 +146,7 @@ class Card extends Component {
     }
     // this.thumbRender();
     this.setState({thumbN:number});
-    
+
     console.log(this.state.isThumb);
     console.log(this.state.thumbN);
   }
@@ -160,7 +197,7 @@ class Card extends Component {
          </div>
          <div>
            <div>
-             
+
            </div>
            <div className="CardText" onClick={this.handleOpenModal}>{this.state.textarea}</div>
            <ReactModal
@@ -173,14 +210,14 @@ class Card extends Component {
                 <div className="topcontainer">
                   <p className="subpageheader"> Detail Page</p>
                   <p className="closebtn"  onClick={this.handleCloseModal}> Close</p>
-                </div> 
+                </div>
               </div>
               <div className="mainBox">
                 <div className="cardName">
-                  <div className="icons"> 
+                  <div className="icons">
                     <FaFileTextO className="icons"/>
                   </div>
-                  
+
                   <RIETextArea
                     className="cardTitle"
                     value={this.state.textarea}
@@ -191,10 +228,10 @@ class Card extends Component {
                     classInvalid="invalid"/>
                   </div>
 
-                  <div className="icons2"> 
+                  <div className="icons2">
                     <FaAlignJustify className="icons"/>
                   </div>
-                  
+
                   <RIETextArea
                     className="cardDetail"
                     value={this.state.detailarea}
@@ -205,7 +242,6 @@ class Card extends Component {
                     classInvalid="invalid"/>
                   <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
                   <FaThumbsDown id= "Thumbdownid" className="Thumbdown" onClick={this.clickThumpdown}/>
-                  <div className="voteNumber">{this.state.thumbN}</div>
                 </div>
            </ReactModal>
          </div>
