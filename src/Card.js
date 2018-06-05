@@ -90,15 +90,15 @@ class Card extends Component {
     // use setState doesn't work. So change state directly
     var number = this.state.thumbN;
     if(this.state.isThumb === 1) {
-      this.state.isThumb =0;
+      this.setState({isThumb: 0});
       number -=1;
       document.getElementById("Thumbupid").style.color = "black";
     }else if(this.state.isThumb === 0){
-      this.state.isThumb = 1;
+      this.setState({isThumb: 1});
       number +=1;
       document.getElementById("Thumbupid").style.color = "green";
     }else{
-      this.state.isThumb = 1;
+      this.setState({isThumb: 1});
       number+=2
       document.getElementById("Thumbupid").style.color = "green";
       document.getElementById("Thumbdownid").style.color = "black";
@@ -113,15 +113,15 @@ class Card extends Component {
   clickThumpdown(){
     var number = this.state.thumbN;
     if(this.state.isThumb === -1) {
-      this.state.isThumb =0;
+      this.setState({isThumb: 0});
       number +=1;
       document.getElementById("Thumbdownid").style.color = "black";
     }else if(this.state.isThumb === 0){
-      this.state.isThumb = -1;
+      this.setState({isThumb: -1});
       number -=1;
       document.getElementById("Thumbdownid").style.color = "red";
     }else{
-      this.state.isThumb = -1;
+      this.setState({isThumb: -1});
       number -=2
       document.getElementById("Thumbdownid").style.color = "red";
       document.getElementById("Thumbupid").style.color = "black";
