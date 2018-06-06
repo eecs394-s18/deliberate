@@ -14,8 +14,8 @@ class Card extends Component {
       detailarea : `Put some detail information`,
       isThumb: 0,
       myVote: 0,
-      posVotings: {},
-      negVotings: {},
+      posVotings: [],
+      negVotings: [],
       nPosVotes: 0,
       nNegVotes: 0
     };
@@ -34,10 +34,10 @@ class Card extends Component {
     this.checkNameAndUpdate(this.name);
   }
   checkNameAndUpdate(voterName){
-    if(voterName in this.state.posVotings){
+    if(this.state.posVotings.includes(voterName)){
       this.setState({isThumb:1});
       document.getElementById("Thumbupid").style.color = "green";
-    } else if(voterName in this.state.negVotings){
+    } else if(this.state.negVotings.includes(voterName)){
       this.setState({isThumb:-1});
       document.getElementById("Thumbdownid").style.color = "red";
     } else{
@@ -83,9 +83,11 @@ class Card extends Component {
       let thisCardPosRef = firebase.database().ref(posPath);
       thisCardPosRef.on('value', (snapshot) => {
           if (snapshot.val()) {
-            this.setState({posVotings: snapshot.val()});
+            var pArray = this.loopThrough(snapshot.val());
+            this.setState({posVotings: pArray});
             this.setState({nPosVotes: Object.keys(snapshot.val()).length});
           } else {
+            this.setState({posVotings: []});
             this.setState({nPosVotes: 0});
           }
       });
@@ -93,9 +95,11 @@ class Card extends Component {
       let thisCardNegRef = firebase.database().ref(negPath);
       thisCardNegRef.on('value', (snapshot) => {
           if (snapshot.val()) {
-            this.setState({negVotings: snapshot.val()});
+            var nArray = this.loopThrough(snapshot.val());
+            this.setState({negVotings: nArray});
             this.setState({nNegVotes: Object.keys(snapshot.val()).length});
           } else {
+            this.setState({negVotings: []});
             this.setState({nNegVotes: 0});
           }
       });
@@ -192,6 +196,7 @@ class Card extends Component {
       this.addVote('up')
     }
     this.setState({myVote:number});
+    this.getVotingFromDb();
   }
 
   clickThumpdown(){
@@ -214,6 +219,17 @@ class Card extends Component {
       this.addVote('down')
     }
     this.setState({myVote:number});
+    this.getVotingFromDb();
+  }
+
+  // helper function
+
+  loopThrough(dict){
+    var array = []
+    for (var key in dict){
+      array.push(key);
+    }
+    return array
   }
 
   render() {
@@ -287,7 +303,17 @@ class Card extends Component {
                     classLoading="loading"
                     classInvalid="invalid"/>
                   <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
+                  <div className="upVoters">
+                  {this.state.posVotings.map((v) =>
+                        v + "\n"
+                  )} 
+                  </div> 
                   <FaThumbsDown id= "Thumbdownid" className="Thumbdown" onClick={this.clickThumpdown}/>
+                  <div className="downVoters">
+                  {this.state.negVotings.map((v) =>
+                        v + "\n"
+                  )} 
+                  </div> 
                   <div className="voteNumber">{this.state.nPosVotes - this.state.nNegVotes}</div>
                 </div>
            </ReactModal>

@@ -157,3 +157,13 @@
     bottom: 0;
     background-color: #00000099;
 }
+.upVoters {
+    position: absolute;
+    top:300px;
+    left:100px; 
+}
+.downVoters {
+    position: absolute;
+    top:300px;
+    left:230px; 
+}
