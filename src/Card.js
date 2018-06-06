@@ -13,15 +13,36 @@ class Card extends Component {
       showModal: false,
       detailarea : `Put some detail information`,
       isThumb: 0,
-      thumbN: 0,
+      myVote: 0,
+      posVotings: {},
+      negVotings: {},
+      nPosVotes: 0,
+      nNegVotes: 0
     };
+    this.name = 'mockName';
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.clickThumpup = this.clickThumpup.bind(this);
     this.clickThumpdown = this.clickThumpdown.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
   }
   handleOpenModal() {
     this.setState({showModal: true});
+    // fetch votedata from database.
+  }
+  afterOpenModal(){
+    this.checkNameAndUpdate(this.name);
+  }
+  checkNameAndUpdate(voterName){
+    if(voterName in this.state.posVotings){
+      this.setState({isThumb:1});
+      document.getElementById("Thumbupid").style.color = "green";
+    } else if(voterName in this.state.negVotings){
+      this.setState({isThumb:-1});
+      document.getElementById("Thumbdownid").style.color = "red";
+    } else{
+      this.setState({isThumb:0});
+    }
   }
 
   handleCloseModal() {
@@ -30,6 +51,7 @@ class Card extends Component {
 
   componentWillMount() {
     this.getCardNameFromDB();
+    this.getVotingFromDb();
     ReactModal.setAppElement('body');
   }
 
@@ -47,10 +69,36 @@ class Card extends Component {
     thisCardDetailRef.on('value', (snapshot) => {
       if (snapshot.val()) {
         this.setState({detailarea: snapshot.val()});
-      } else {
-        console.log(snapshot.val(), ' is null');
       }
     });
+  }
+
+  getVotingFromDb() {
+      if (this.props.cardId === 'default') { // default is a placeholder card that shouldn't be displayed
+        console.error("default card shouldn't be displayed")
+      }
+      var negPath = "/cards/" + this.props.cardId + "/negativeVotes/";
+      var posPath = "/cards/" + this.props.cardId + "/positiveVotes/";
+
+      let thisCardPosRef = firebase.database().ref(posPath);
+      thisCardPosRef.on('value', (snapshot) => {
+          if (snapshot.val()) {
+            this.setState({posVotings: snapshot.val()});
+            this.setState({nPosVotes: Object.keys(snapshot.val()).length});
+          } else {
+            this.setState({nPosVotes: 0});
+          }
+      });
+
+      let thisCardNegRef = firebase.database().ref(negPath);
+      thisCardNegRef.on('value', (snapshot) => {
+          if (snapshot.val()) {
+            this.setState({negVotings: snapshot.val()});
+            this.setState({nNegVotes: Object.keys(snapshot.val()).length});
+          } else {
+            this.setState({nNegVotes: 0});
+          }
+      });
   }
 
   virtualServerCallbackName = (newState) => {
@@ -90,50 +138,84 @@ class Card extends Component {
       this.isStringAcceptable(this.state.textarea);
   }
 
+  deleteVote(voterName, voteType) {
+    if (voteType === 'up') {
+      // remove the positive vote
+      let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.name;
+      firebase.database().ref().child(votePath).remove();
+    } else if (voteType === 'down') {
+      // remove the negative vote
+      let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.name;
+      firebase.database().ref().child(votePath).remove();
+    } else {
+      console.error('invalid vote type');
+    }
+  }
+
+  addVote(voteType) {
+    if (voteType==='up') {
+      // remove negative vote
+      this.deleteVote(this.name, 'down');
+      // add positive vote
+      let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.name;
+      firebase.database().ref().child(votePath).set(true);
+    }
+    else if (voteType==='down') {
+      // remove positive vote
+      this.deleteVote(this.name, 'up');
+      // add negative vote
+      let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.name;
+      firebase.database().ref().child(votePath).set(true);
+    } else {
+      console.error('invalid vote type');
+    }
+  }
+
   clickThumpup(){
     // use setState doesn't work. So change state directly
-    var number = this.state.thumbN;
+    var number = this.state.myVote;
     if(this.state.isThumb === 1) {
       this.setState({isThumb: 0});
       number -=1;
       document.getElementById("Thumbupid").style.color = "black";
+      this.deleteVote(this.name, 'up');
     }else if(this.state.isThumb === 0){
       this.setState({isThumb: 1});
       number +=1;
       document.getElementById("Thumbupid").style.color = "green";
+      this.addVote('up')
     }else{
       this.setState({isThumb: 1});
       number+=2
       document.getElementById("Thumbupid").style.color = "green";
       document.getElementById("Thumbdownid").style.color = "black";
+      this.addVote('up')
     }
-    // this.thumbRender();
-    this.setState({thumbN:number});
-    
-    console.log(this.state.isThumb);
-    console.log(this.state.thumbN);
+    this.setState({myVote:number});
   }
 
   clickThumpdown(){
-    var number = this.state.thumbN;
+    var number = this.state.myVote;
     if(this.state.isThumb === -1) {
       this.setState({isThumb: 0});
       number +=1;
       document.getElementById("Thumbdownid").style.color = "black";
+      this.deleteVote(this.name, 'down');
     }else if(this.state.isThumb === 0){
       this.setState({isThumb: -1});
       number -=1;
       document.getElementById("Thumbdownid").style.color = "red";
+      this.addVote('down')
     }else{
       this.setState({isThumb: -1});
       number -=2
       document.getElementById("Thumbdownid").style.color = "red";
       document.getElementById("Thumbupid").style.color = "black";
+      this.addVote('down')
     }
-    this.setState({thumbN:number});
-    console.log(this.state.isThumb);
-    console.log(this.state.thumbN);
+    this.setState({myVote:number});
   }
+
   render() {
     return (
     <div className="Card" >
@@ -160,11 +242,12 @@ class Card extends Component {
          </div>
          <div>
            <div>
-             
+
            </div>
            <div className="CardText" onClick={this.handleOpenModal}>{this.state.textarea}</div>
            <ReactModal
               isOpen={this.state.showModal}
+              onAfterOpen = {this.afterOpenModal}
               contentLabel="Minimal Modal Example"
               className="Modal"
               shouldCloseOnOverlayClick={false}
@@ -173,14 +256,14 @@ class Card extends Component {
                 <div className="topcontainer">
                   <p className="subpageheader"> Detail Page</p>
                   <p className="closebtn"  onClick={this.handleCloseModal}> Close</p>
-                </div> 
+                </div>
               </div>
               <div className="mainBox">
                 <div className="cardName">
-                  <div className="icons"> 
+                  <div className="icons">
                     <FaFileTextO className="icons"/>
                   </div>
-                  
+
                   <RIETextArea
                     className="cardTitle"
                     value={this.state.textarea}
@@ -191,10 +274,10 @@ class Card extends Component {
                     classInvalid="invalid"/>
                   </div>
 
-                  <div className="icons2"> 
+                  <div className="icons2">
                     <FaAlignJustify className="icons"/>
                   </div>
-                  
+
                   <RIETextArea
                     className="cardDetail"
                     value={this.state.detailarea}
@@ -205,7 +288,7 @@ class Card extends Component {
                     classInvalid="invalid"/>
                   <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
                   <FaThumbsDown id= "Thumbdownid" className="Thumbdown" onClick={this.clickThumpdown}/>
-                  <div className="voteNumber">{this.state.thumbN}</div>
+                  <div className="voteNumber">{this.state.nPosVotes - this.state.nNegVotes}</div>
                 </div>
            </ReactModal>
          </div>
