@@ -21,8 +21,9 @@ class Grid extends Component {
             links: [],
             name: "Click to enter text", //default card name
             votes: "hihta",
-            memberName: "",
-            passcodeEntered: false
+            memberName: "default",
+            passcodeEntered: false,
+            isAdmin: false
         };
         this.addToList = this.addToList.bind(this);
         this.deletefromList = this.deletefromList.bind(this);
@@ -154,13 +155,18 @@ class Grid extends Component {
 
             if (memberPasscodeHit) {
                 console.log("member");
-                this.setState({memberName: memberName});
+                if (memberName){
+                    this.setState({memberName: memberName});
+                }
                 newState = true;
             } 
 
             if (adminPasscodeHit) {
                 console.log("admin");
-                this.setState({memberName: memberName});
+                if (memberName){
+                    this.setState({memberName: memberName});
+                }
+                this.setState({isAdmin: true})
                 newState = true;
             }
 
@@ -224,7 +230,8 @@ class Grid extends Component {
                             addToList= {() => this.addToList(sectionTitle)}
                             deletefromList= {this.deletefromList}
                             drawLink = {this.drawLink}
-                            memberName = {this.state.memberName}/>
+                            memberName = {this.state.memberName}
+                            isAdmin = {this.state.isAdmin}/>
                     )}; 
                     {this.state.links.map((t) =>
                         <LineTo key={t[0]+t[1]} from={t[0]} to={t[1]} />

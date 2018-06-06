@@ -18,7 +18,8 @@ class GridSection extends Component {
                             this.props.deletefromList(this.props.sectionTitle, cardId)}
                         drawLink={() =>
                             this.props.drawLink(cardId)}
-                        memberName={this.props.memberName}/>
+                        memberName={this.props.memberName}
+                        isAdmin = {this.props.isAdmin}/>
                 )}
             </div>
             <img

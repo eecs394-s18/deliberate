@@ -304,17 +304,33 @@ class Card extends Component {
                     classLoading="loading"
                     classInvalid="invalid"/>
                   <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
+                  {this.props.isAdmin ? (
                   <div className="upVoters">
-                  {this.state.posVotings.map(function(item, i){
-                    return <li>{item}</li>
-                  })} 
-                  </div> 
+                  {
+                    this.state.posVotings.map(function(item, i){
+                      return <li>{item}</li>
+                    })
+                  }
+                   </div> ) : (
+                   <div className="upVoters">
+                   </div> 
+                   )}
+                   
+                 
                   <FaThumbsDown id= "Thumbdownid" className="Thumbdown" onClick={this.clickThumpdown}/>
+                  
+                  {this.props.isAdmin ? (
                   <div className="downVoters">
-                  {this.state.negVotings.map(function(item, i){
-                    return <li>{item}</li>
-                  })} 
+                  {
+                    this.state.negVotings.map(function(item, i){
+                      return <li>{item}</li>
+                    })
+                  }
+                  </div> ) : (
+                  <div className="downVoters">
                   </div> 
+                  )}
+                  
                   <div className="voteNumber">{this.state.nPosVotes - this.state.nNegVotes}</div>
                 </div>
            </ReactModal>
