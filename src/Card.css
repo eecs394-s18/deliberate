@@ -159,11 +159,11 @@
 }
 .upVoters {
     position: absolute;
-    top:300px;
-    left:100px; 
+    bottom: 0;
+    left:50px; 
 }
 .downVoters {
     position: absolute;
-    top:300px;
-    left:230px; 
+    bottom: 0;
+    left:280px; 
 }

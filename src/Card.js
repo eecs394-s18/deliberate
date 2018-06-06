@@ -304,15 +304,15 @@ class Card extends Component {
                     classInvalid="invalid"/>
                   <FaThumbsUp id= "Thumbupid" className="Thumbup" onClick={this.clickThumpup} />
                   <div className="upVoters">
-                  {this.state.posVotings.map((v) =>
-                        v + "\n"
-                  )} 
+                  {this.state.posVotings.map(function(item, i){
+                    return <li>{item}</li>
+                  })} 
                   </div> 
                   <FaThumbsDown id= "Thumbdownid" className="Thumbdown" onClick={this.clickThumpdown}/>
                   <div className="downVoters">
-                  {this.state.negVotings.map((v) =>
-                        v + "\n"
-                  )} 
+                  {this.state.negVotings.map(function(item, i){
+                    return <li>{item}</li>
+                  })} 
                   </div> 
                   <div className="voteNumber">{this.state.nPosVotes - this.state.nNegVotes}</div>
                 </div>
