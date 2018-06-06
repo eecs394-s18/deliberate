@@ -67,6 +67,10 @@ class Meeting extends Component {
         return (
         <div className="bkg">
           <h1> Deliberate </h1>
+          <h5> simplify your meetings </h5>
+          <hr/>
+          <br/>
+          <h2> Create a new meeting </h2>
           <form onSubmit={this.createMeetingForm}>
             <input type="text" autoComplete="off" name="meetingName" value = {this.state.meetingName} placeholder="Meeting Name" onChange = {this.handleMeetingNameChange} />
             <input type="password" autoComplete="off" name="adminPasscode" value = {this.state.adminPasscode} placeholder="Administrator Passcode" onChange = {this.handleAdminPasscodeChange}/>
