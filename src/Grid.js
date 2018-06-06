@@ -21,6 +21,7 @@ class Grid extends Component {
             links: [],
             name: "Click to enter text", //default card name
             votes: "hihta",
+            memberName: "",
             passcodeEntered: false
         };
         this.addToList = this.addToList.bind(this);
@@ -142,20 +143,24 @@ class Grid extends Component {
             const test = snapshot.val();
             const memberPasscode = this.getMemberInputPassword();
             const adminPasscode = this.getAdminInputPassword();
+            const memberName = this.getMemberName();
 
             document.getElementById("admin").value = "";
             document.getElementById("member").value = "";
+            document.getElementById("memberName").value = "";
 
             var memberPasscodeHit = (test.memberPasscode === memberPasscode);
             var adminPasscodeHit = (test.adminPasscode === adminPasscode);
 
             if (memberPasscodeHit) {
                 console.log("member");
+                this.setState({memberName: memberName});
                 newState = true;
             } 
 
             if (adminPasscodeHit) {
                 console.log("admin");
+                this.setState({memberName: memberName});
                 newState = true;
             }
 
@@ -180,6 +185,11 @@ class Grid extends Component {
     getAdminInputPassword() {
         const admin = document.getElementById("admin").value;
         return admin;
+    }
+
+    getMemberName(){
+        const memberName = document.getElementById("memberName").value;
+        return memberName;
     }
 
     deletefromList(sectionId, cardId) {
@@ -213,7 +223,8 @@ class Grid extends Component {
                             cards={this.state.cards[sectionTitle]}
                             addToList= {() => this.addToList(sectionTitle)}
                             deletefromList= {this.deletefromList}
-                            drawLink = {this.drawLink}/>
+                            drawLink = {this.drawLink}
+                            memberName = {this.state.memberName}/>
                     )}; 
                     {this.state.links.map((t) =>
                         <LineTo key={t[0]+t[1]} from={t[0]} to={t[1]} />
@@ -224,6 +235,7 @@ class Grid extends Component {
                 <h1> enter meeting passcode! </h1>
                 <input type="text" id="admin" placeholder="Admin Password" />
                 <input type="text" id="member" placeholder="Member Password" />
+                <input type="text" id="memberName" placeholder="Member Name" />
                 <div id="btn" onClick={this.submit}> <div> submit </div> </div>
             </div>
             )

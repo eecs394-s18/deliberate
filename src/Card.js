@@ -19,7 +19,6 @@ class Card extends Component {
       nPosVotes: 0,
       nNegVotes: 0
     };
-    this.name = 'mockName';
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.clickThumpup = this.clickThumpup.bind(this);
@@ -31,7 +30,7 @@ class Card extends Component {
     // fetch votedata from database.
   }
   afterOpenModal(){
-    this.checkNameAndUpdate(this.name);
+    this.checkNameAndUpdate(this.props.memberName);
   }
   checkNameAndUpdate(voterName){
     if(voterName in this.state.posVotings){
@@ -138,14 +137,15 @@ class Card extends Component {
       this.isStringAcceptable(this.state.textarea);
   }
 
-  deleteVote(voterName, voteType) {
+  deleteVote(voteType) {
+    console.log(voteType)
     if (voteType === 'up') {
       // remove the positive vote
-      let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.name;
+      let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.props.memberName;
       firebase.database().ref().child(votePath).remove();
     } else if (voteType === 'down') {
       // remove the negative vote
-      let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.name;
+      let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.props.memberName;
       firebase.database().ref().child(votePath).remove();
     } else {
       console.error('invalid vote type');
@@ -153,18 +153,19 @@ class Card extends Component {
   }
 
   addVote(voteType) {
+    console.log(voteType)
     if (voteType==='up') {
       // remove negative vote
-      this.deleteVote(this.name, 'down');
+      this.deleteVote('down');
       // add positive vote
-      let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.name;
+      let votePath = "/cards/" + this.props.cardId + "/positiveVotes/" + this.props.memberName;
       firebase.database().ref().child(votePath).set(true);
     }
     else if (voteType==='down') {
       // remove positive vote
-      this.deleteVote(this.name, 'up');
+      this.deleteVote('up');
       // add negative vote
-      let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.name;
+      let votePath = "/cards/" + this.props.cardId + "/negativeVotes/" + this.props.memberName;
       firebase.database().ref().child(votePath).set(true);
     } else {
       console.error('invalid vote type');
@@ -178,7 +179,7 @@ class Card extends Component {
       this.setState({isThumb: 0});
       number -=1;
       document.getElementById("Thumbupid").style.color = "black";
-      this.deleteVote(this.name, 'up');
+      this.deleteVote('up');
     }else if(this.state.isThumb === 0){
       this.setState({isThumb: 1});
       number +=1;
@@ -200,7 +201,7 @@ class Card extends Component {
       this.setState({isThumb: 0});
       number +=1;
       document.getElementById("Thumbdownid").style.color = "black";
-      this.deleteVote(this.name, 'down');
+      this.deleteVote('down');
     }else if(this.state.isThumb === 0){
       this.setState({isThumb: -1});
       number -=1;
