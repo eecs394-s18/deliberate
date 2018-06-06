@@ -4,14 +4,22 @@
     z-index: -10;
 }
 
+#bkg {
+    padding-top: 150px;
+}
+
+#bkg h1 {
+	text-align: center;
+}
+
 #btn {
 	height: 50px;
 	width: 100px;
 	text-align: center;
 	display: table;
-	border-radius: 3px;
+	border-radius: 6px;
 	background: #444;
-	margin-top: 50px;
+	margin: 0 auto;
 }
 
 #btn div {
@@ -20,4 +28,43 @@
     position: relative;
     top: -2px;
     color: white;
+}
+
+input[type="password"], input[type="text"] {
+	margin: 40px auto;
+	border: none;
+	display: block;
+	width: 300px;
+	height: 30px;
+	outline: none;
+	font-size: 1.3rem;
+	text-align: center;
+	border-bottom: 2px solid #444;
+}
+
+input[type="submit"] {
+	outline: none;
+	background: #2F9CCF;
+	height: 40px;
+	border-radius: 6px;
+	width: 110px;
+	font-size: 1.3rem;
+	color: #fff;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  text-align: center;
+  font-size: 1.3rem;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  text-align: center;
+  font-size: 1.3rem;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  text-align: center;
+  font-size: 1.3rem;
+}
+:-moz-placeholder { /* Firefox 18- */
+  text-align: center;
+  font-size: 1.3rem;
 }
