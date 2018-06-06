@@ -134,7 +134,10 @@ class Card extends Component {
   }
 
   isStringAcceptable = (string) => {
-    return (string.length >= 1);  // Minimum 4 letters long
+    if (string !== null) {
+      return (string.length >= 1);  // Minimum 4 letters long
+    }
+    return true;
   };
 
   validate(){
