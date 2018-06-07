@@ -1,5 +1,8 @@
 # About deliberate
 
+A tool to simplify your meetings and give voice to everybody on your team. 
+Accessible at https://red394-deliberate.herokuapp.com/
+
 # Setup
 
 # Full list of languages/frameworks/services used
