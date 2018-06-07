@@ -247,7 +247,7 @@ class Grid extends Component {
             this.state.passcodeEntered ? (
                 <div className="Grid">
                 <div className="MeetingName">
-                    <h1>{this.state.meetingName}</h1>
+                    <h1 className="MeetingNameText">{this.state.meetingName}</h1>
                 </div>
                     {this.sections.map((sectionTitle, i) =>
                         <GridSection

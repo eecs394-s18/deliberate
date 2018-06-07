@@ -4,6 +4,10 @@
     z-index: -10;
 }
 
+.MeetingNameText {
+	margin: 0;
+}
+
 #bkg {
     padding-top: 150px;
 }
