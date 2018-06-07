@@ -242,7 +242,7 @@ class Grid extends Component {
                 <h1> enter meeting passcode! </h1>
                 <input type="password" id="admin" placeholder="Admin Password" />
                 <input type="password" id="member" placeholder="Member Password" />
-                <input type="text" id="memberName" placeholder="Member Name" />
+                <input type="text" id="memberName" placeholder="Your Name" />
                 <div id="btn" onClick={this.submit}> <div> submit </div> </div>
             </div>
             )
