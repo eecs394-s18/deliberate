@@ -18,6 +18,7 @@ class Grid extends Component {
                 "Solutions": []
             },
             meetingId: "1",
+            meetingName: "",
             links: [],
             name: "Click to enter text", //default card name
             votes: "hihta",
@@ -48,7 +49,8 @@ class Grid extends Component {
                     // --------------
                     tCards[sectionName] = cardIds;
                 }
-                this.setState({ cards : tCards})
+                this.setState({ cards : tCards});
+
                 let linkPath = 'links/';
                 let linksRef = dbRef.ref(linkPath);
 
@@ -77,6 +79,23 @@ class Grid extends Component {
                     }
                 this.setState({links:tlinks});
             });
+
+            let meetingNamePath = 'meetings/'+meetingId + "/name";
+            let meetingNameRef = dbRef.ref(meetingNamePath);
+            console.log(meetingNamePath);
+            meetingNameRef.on('value', (snapshot) => {
+                var tmeetingName = this.state.meetingName;
+                if(snapshot.val()) {
+                    console.log("hi1");
+                    tmeetingName = snapshot.val();
+                    console.log(tmeetingName, snapshot.val())
+                } else {
+                    console.log("hi2");
+                    tmeetingName = "M" + this.state.meetingId;
+                }
+                this.setState({ meetingName : tmeetingName});
+            });
+            console.log(this.state.meetingName);
         });
         });
     }
@@ -153,26 +172,30 @@ class Grid extends Component {
             var memberPasscodeHit = (test.memberPasscode === memberPasscode);
             var adminPasscodeHit = (test.adminPasscode === adminPasscode);
 
+
             if (memberPasscodeHit) {
                 console.log("member");
-                if (memberName){
-                    this.setState({memberName: memberName});
-                }
+                this.setState({memberName: memberName});
                 newState = true;
             } 
 
             if (adminPasscodeHit) {
                 console.log("admin");
-                if (memberName){
-                    this.setState({memberName: memberName});
-                }
+                this.setState({memberName: memberName});
                 this.setState({isAdmin: true})
                 newState = true;
+            }
+
+            if (!memberName) {
+                window.alert("please fill in the name");
+                newState = false;
+                return
             }
 
             this.setState({passcodeEntered: newState});
             var tlink = this.state.links;
             this.setState({links: tlink});
+
 
             if (newState === false) {
                 alert('incorrect passcode!')
@@ -219,9 +242,13 @@ class Grid extends Component {
     }
 
     render() {
+        console.log(this.state.meetingName);
         return (
             this.state.passcodeEntered ? (
                 <div className="Grid">
+                <div className="MeetingName">
+                    <h1>{this.state.meetingName}</h1>
+                </div>
                     {this.sections.map((sectionTitle, i) =>
                         <GridSection
                             key={sectionTitle}
@@ -232,7 +259,7 @@ class Grid extends Component {
                             drawLink = {this.drawLink}
                             memberName = {this.state.memberName}
                             isAdmin = {this.state.isAdmin}/>
-                    )}; 
+                    )}
                     {this.state.links.map((t) =>
                         <LineTo key={t[0]+t[1]} from={t[0]} to={t[1]} />
                     )}  

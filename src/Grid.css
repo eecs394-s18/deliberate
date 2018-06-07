@@ -30,6 +30,14 @@
     color: white;
 }
 
+.MeetingName{
+	background-color: #DEDEDE;
+	text-align: center;
+	font-family: 'Work Sans', sans-serif;
+	border-bottom: gray;
+	border-bottom-style: solid;
+	border-width: 1px;
+
 input[type="password"], input[type="text"] {
 	margin: 40px auto;
 	border: none;
@@ -67,4 +75,5 @@ input[type="submit"] {
 :-moz-placeholder { /* Firefox 18- */
   text-align: center;
   font-size: 1.3rem;
+
 }
