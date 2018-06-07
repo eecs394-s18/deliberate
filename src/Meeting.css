@@ -1,5 +1,51 @@
 .bkg {
 	height: 100vh;
 	width: 100vw;
-	background: #ffb9a3;
+	background: #fff;
+	color: #333;
+	text-align: center;
+	padding-top: 150px;
+}
+
+input[type="password"], input[type="text"] {
+	margin: 40px auto;
+	border: none;
+	display: block;
+	width: 300px;
+	height: 30px;
+	outline: none;
+	font-size: 1.3rem;
+	text-align: center;
+	border-bottom: 2px solid #444;
+}
+
+input[type="submit"] {
+	outline: none;
+	background: #2F9CCF;
+	height: 40px;
+	border-radius: 6px;
+	width: 110px;
+	font-size: 1.3rem;
+	color: #fff;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  text-align: center;
+  font-size: 1.3rem;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  text-align: center;
+  font-size: 1.3rem;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  text-align: center;
+  font-size: 1.3rem;
+}
+:-moz-placeholder { /* Firefox 18- */
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+h1 {
+	margin: 25px;
 }
