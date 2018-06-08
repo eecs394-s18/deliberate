@@ -3,8 +3,6 @@
 A tool to simplify your meetings and give voice to everybody on your team. 
 Accessible at https://red394-deliberate.herokuapp.com/
 
-# Setup
-
 # Full list of languages/frameworks/services used
 1. Firebase = database
 2. React = frontend framework
@@ -33,5 +31,8 @@ Accessible at https://red394-deliberate.herokuapp.com/
 9. A new tab in your browser should appear and that will be a local version of Deliberate likely running on http://localhost:3000/
 10. To close the local version of Deliberate go to the Terminal or Command Prompt window and hit the command button and c button at the same time. Also you can close the tab in your browser but doing it in Terminal or Command Prompt is the best way
 11. If you would like to reopen Deliberate, you can just type "npm start" into Terminal or Command Prompt only if you are still in the deliberate folder. If you have started a new Terminal or Command Prompt window then you need to navigate back to the deliberate folder in the github folder (how to do this can be found by googling how to navigate to a folder given it's name) and then once in the deliberate folder type "npm start" into Terminal or Command Prompt
+
+# Deploying changes
+Any changes to the master branch will be detected by Heroku and will trigger a re-build. After the build is complete, you will be able to access the new version at the same link = https://red394-deliberate.herokuapp.com/
 
 # Link to private google document with account information of delployment services
