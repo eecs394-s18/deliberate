@@ -35,4 +35,7 @@ Accessible at https://red394-deliberate.herokuapp.com/
 # Deploying changes
 Any changes to the master branch will be detected by Heroku and will trigger a re-build. After the build is complete, you will be able to access the new version at the same link = https://red394-deliberate.herokuapp.com/
 
+# FireBase Access
+To access to database of this Web App, you need to send an email to @ to get access to the database. When you first enter the database, you click on Get Start. In the recent projects, you can find deliberate database. After entering the database, on the left side, you can click on database, and you will see all the information about our database.
+
 # Link to private google document with account information of delployment services
